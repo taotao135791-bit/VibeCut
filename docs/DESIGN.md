@@ -30,59 +30,80 @@
 
 ---
 
-## 1. 七种 BOLD 方向（必须选一种 · 不能混用）
+## 1. 如何合成一个方向（不是选，是生）
 
-每条广告/promo 在 storyboard 阶段必须**承诺**一种方向写在文件 frontmatter 上。混用是 AI-slop 第一信号。
+> 任何从固定清单里“选”一个方向的行为，本身就是 AI-slop。本节不提供选项，只提供**合成公式**。每一次 promo / ad / motion 项目都必须现场生成一个**不可复用、不可被下一个项目复粘**的独一无二方向。
 
-### A · Editorial Brutalism（编辑式粗野）
-> 用法：硬数据科技产品（AI 模型 / 开发工具 / 基础设施）  
-> 视觉：纯黑 OLED 底 + Bebas/Playfair 巨型字 + 单 accent + file mark + ticker + drop cap  
-> 字体：`Bebas Neue` (display) × `Playfair Display` italic (big number) × `Space Mono` (file mark) × `Merriweather` italic (note)  
-> 主色：`#000000` / `#F2F2F2` / `#FF4500` (signal orange) / `#B5FF00` (data lime, 仅在数字右侧)  
-> 关键动效：staggered letter drop-in / number ticker (0→target) / chromatic RGB split / grain pulse  
-> 反例：拒绝 FullCard 居中卡、拒绝紫蓝渐变
+### 公式 · INFLUENCE × COUNTER × VERB
 
-### B · Cinematic Glitch（电影感故障）
-> 用法：开场冷启 / 重启 / 系统类视频  
-> 视觉：黑底 + 扫描线 + RGB chromatic aberration + 反白闪 + analog 噪点  
-> 字体：`Anton` × `Space Mono`  
-> 主色：`#0A0A0A` + 偏冷白 `#E8E8EE` + accent `#00E5FF`  
-> 关键动效：每段切换 0.15s flash + RGB 错位 ±0.6% + 反白 1 帧
+```
+     ≥3 个跨媒介、跨时代、跨学科的 non-obvious 影响源
+  ×  1 个 counter-convention（本行业 / 本媒介里没人这么干）
+  ×  1 个 verb metaphor（这支作品在做什么动作）
+  =  一句话、一次性、不可复用的方向
+```
 
-### C · Magazine Editorial（杂志编辑）
-> 用法：品牌故事、艺术家、生活方式  
-> 视觉：左对齐 drop cap + pull quote + 不对称网格 + 印刷字号节奏 + 编号  
-> 字体：`Libre Bodoni` (heading) × `Public Sans` (body) × `Newsreader` (long-form)  
-> 主色：象牙白 `#F5F1E8` + 油墨黑 `#0F0E0C` + 单 accent `#9F2D2D`（暗朱红）  
-> 关键动效：drop cap fade-in + 行间距 1.65 流式滚动 + image hairline 边框
+### Step 1 · 采集 ≥3 个 non-obvious 影响源
 
-### D · Aurora Liquid（极光液态）
-> 用法：消费向产品、情感品牌、AI 创意类  
-> 视觉：gradient mesh 背景 + 玻璃态前景 + 柔光晕 + 高级流体动画  
-> 字体：`Cormorant Garamond` (italic display) × `Epilogue`  
-> 主色：mesh：靛 `#1B1455` → 紫 `#8B5CF6` → 桃 `#FFB7C5`；前景白  
-> 关键动效：mesh 缓慢漂移 + scale-in 0.96 → 1.0 with cubic-bezier(0.22, 1, 0.36, 1)
+最首出出现的参考不计。AI 模型广告里“Wired 赛博 / 紫蓝渐变 / Tron / The Matrix” 一律拒使。打开以下六个面向，每面向抽一到两个项目。下表永远 mutable：
 
-### E · Vibrant Block（高饱和块状）
-> 用法：消费 / 直播 / 电商促销 / 短视频钩子  
-> 视觉：duotone 大色块 + 几何形 + 高对比 + 大字标签  
-> 字体：`Anton` (display) × `Epilogue`  
-> 主色：`#FFFFFF` 底 + `#FF3D00` block + `#000000` block，仅 3 色  
-> 关键动效：block slide-in（左→右）+ 文字 pop scale 1.05 → 1.0
+| 面向 | 点火词（仅启发） |
+|---|---|
+| 电影 / 影像 | Tarkovsky / Wong Kar-wai / 80s VHS / NHK 误播 / Apple Keynote 2007 / La Jetée / 香港 90s 黑帮片 / Criterion 封面 |
+| 出版 / 平面 | Emigre / Wired Issue 1 / Penguin 古典 / Bauhaus Dessau 书 / 《新青年》 / 1970s 民航发车表 |
+| 艺术 · 运动 | 构成主义 / Memphis 1981 / Vorticism / 佐藤茧海报 / 包豪斯 / Op Art |
+| 物理 / 材质 | 火车站翻牌字 / 金属压印 / 报纸油墨渗透 / 玻璃上冷凝 / 蜡封压印 / 打字机色带 |
+| 街头 · 次文化 | 香港茶餐厅菜单 / Punk zine / 朝鲜官媒报头 / 70s 中全会会场布置 |
+| 技术 · 伪装 | DOS BIOS / Bloomberg Terminal / IBM 8086 / 火车站机械式发车表 / Telex 电传机 |
 
-### F · Neo Mono Terminal（极客终端）
-> 用法：开发者工具、CLI、code demo  
-> 视觉：纯黑 + 终端绿 + ASCII art + 打字机 cursor + 等宽对齐  
-> 字体：`Space Mono` × `JetBrains Mono`（如不可用退到 monospace）  
-> 主色：`#0D0D0D` + `#00FF66` (CRT 绿) + `#FFFFFF` (主文)  
-> 关键动效：steps() 打字机 + cursor 600ms 闪烁 + 行进度条
+### Step 2 · 选一个 counter-convention
 
-### G · Kinetic Numbers（动态数字）
-> 用法：榜单、数据揭示、年度回顾、模型规格  
-> 视觉：单一巨型数字占据 60-80% 帧高 + ticker 滚动到目标 + 单位上标  
-> 字体：`Playfair Display` italic (数字本体) × `Bebas Neue` (单位)  
-> 主色：黑底 + 数据色 `#B5FF00` + accent 红 `#FF3D00`  
-> 关键动效：number ticker（带递减步长）+ 抵达目标后 RGB split 一次 + 下划线信号橙划过
+三问自己：
+
+1. 本行业 / 本题材默认长什么样？列出 3 个。
+2. 哪一项反起来最狮胆？那就是本项目的 *counter*。
+3. counter 与 Step 1 的影响源产生什么化学反应？
+
+示例：AI 模型默认 = RGB 玻璃 / 未来感 / 紫蓝。**counter** = “用 1972 原子能机构技术报告书的鋼印黑白报头”。
+
+### Step 3 · 用一个 verb metaphor 收拢
+
+不要“名词 + 名词”（那只是标签）。用一个动词：
+
+- *Stamping a model spec onto a press wire dispatch*
+- *Tuning a long-wave radio that finally locks onto signal*
+- *Pressing wax over a court transcript*
+- *Pinning a leaflet to the leaving-train timetable*
+
+一句话能说清，才能被身体领会。
+
+### 输出格式（必填在脚本 frontmatter）
+
+```yaml
+direction_id: "<slug-unique-to-this-project>"     # 例：k26-press-dispatch
+influences:                                       # ≥3
+  - "1972 IAEA technical report typesetting"
+  - "NHK 误播黑白道歉字幕 1989"
+  - "Manhattan Project declassified memo"
+counter_convention: "拒绝今天 AI 模型默认的 RGB 玻璃 + 紫蓝渐变"
+verb_metaphor: "Stamping a model spec onto a press wire dispatch"
+palette: { dom: "#0a0a0a", text: "#e8e6e1", accent: "#b81d13", data: "#f4d35e" }
+type_pair: { display: "playfair-display", caps: "bebas-neue", mono: "jetbrains-mono", body: "newsreader" }
+```
+
+### 合成范例（展示“每次都不重样”是什么意思）
+
+以下三个示例均为 *Kimi K2.6 30s ad* 这一同一题目生成 —— 你看到三种完全不同的世界，就明白为什么不能预存为清单：
+
+- **k26-press-dispatch** = `IAEA 1972 报告` + `火车站发车表翻牌` + `Telex 电传` × 反 RGB 玻璃 × *Stamping spec onto press wire*
+- **k26-cantonese-tea-receipt** = `香港茶餐厅菜单` + `Wong Kar-wai 抽帧` + `Hong Kong neon 霉玻璃` × 反企业发布会 × *Folding the model into a midnight 饭后 order*
+- **k26-supreme-court-stamp** = `Constructivist 招贴` + `蜡封压印` + `Bloomberg Terminal` × 反 Apple Keynote × *Pressing wax onto a verdict*
+
+三个用同一公式生成、不可互换、下一个项目都不能复粘。**这才是“持续创造”。**
+
+### 反退退机制（防止隐形收敛到“7 选 1”）
+
+任何 promo 提交前，agent 必须检查上一个项目的 `direction_id`。若本项目 `direction_id` 与其 influence 集合与上一个重复率 ≥ 50%，需发起一轮 *re-roll*：重新走 Step 1。2 次 re-roll 不能解决则告警人类。
 
 ---
 
