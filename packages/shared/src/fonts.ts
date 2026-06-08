@@ -47,6 +47,21 @@ export const SUPPORTED_FONTS: FontDefinition[] = [
   { id: 'playfair-display', displayName: 'Playfair Display', category: 'serif', source: 'google', fontconfigName: 'Playfair Display', cssFontFamily: "'Playfair Display', serif", googleFontsModule: 'PlayfairDisplay' },
   { id: 'oswald', displayName: 'Oswald', category: 'display', source: 'google', fontconfigName: 'Oswald', cssFontFamily: "'Oswald', sans-serif", googleFontsModule: 'Oswald' },
   { id: 'bebas-neue', displayName: 'Bebas Neue', category: 'display', source: 'google', fontconfigName: 'Bebas Neue', cssFontFamily: "'Bebas Neue', sans-serif", googleFontsModule: 'BebasNeue' },
+
+  // ── Editorial / Brutalist / Display additions (DESIGN.md alignment) ──
+  // Brutalist Raw — Mono
+  { id: 'space-mono', displayName: 'Space Mono', category: 'monospace', source: 'google', fontconfigName: 'Space Mono', cssFontFamily: "'Space Mono', monospace", googleFontsModule: 'SpaceMono' },
+  { id: 'jetbrains-mono', displayName: 'JetBrains Mono', category: 'monospace', source: 'google', fontconfigName: 'JetBrains Mono', cssFontFamily: "'JetBrains Mono', monospace", googleFontsModule: 'JetBrainsMono' },
+  // Display — Brutal / Editorial poster
+  { id: 'anton', displayName: 'Anton', category: 'display', source: 'google', fontconfigName: 'Anton', cssFontFamily: "'Anton', sans-serif", googleFontsModule: 'Anton' },
+  { id: 'archivo-black', displayName: 'Archivo Black', category: 'display', source: 'google', fontconfigName: 'Archivo Black', cssFontFamily: "'Archivo Black', sans-serif", googleFontsModule: 'ArchivoBlack' },
+  // Editorial serifs (Magazine / News)
+  { id: 'libre-bodoni', displayName: 'Libre Bodoni', category: 'serif', source: 'google', fontconfigName: 'Libre Bodoni', cssFontFamily: "'Libre Bodoni', serif", googleFontsModule: 'LibreBodoni' },
+  { id: 'newsreader', displayName: 'Newsreader', category: 'serif', source: 'google', fontconfigName: 'Newsreader', cssFontFamily: "'Newsreader', serif", googleFontsModule: 'Newsreader' },
+  { id: 'cormorant-garamond', displayName: 'Cormorant Garamond', category: 'serif', source: 'google', fontconfigName: 'Cormorant Garamond', cssFontFamily: "'Cormorant Garamond', serif", googleFontsModule: 'CormorantGaramond' },
+  // Modern body sans (replace Inter/Roboto when possible)
+  { id: 'public-sans', displayName: 'Public Sans', category: 'sans-serif', source: 'google', fontconfigName: 'Public Sans', cssFontFamily: "'Public Sans', sans-serif", googleFontsModule: 'PublicSans' },
+  { id: 'epilogue', displayName: 'Epilogue', category: 'sans-serif', source: 'google', fontconfigName: 'Epilogue', cssFontFamily: "'Epilogue', sans-serif", googleFontsModule: 'Epilogue' },
 ];
 
 export const FONT_BY_ID: Record<string, FontDefinition> = Object.fromEntries(

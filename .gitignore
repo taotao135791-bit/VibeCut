@@ -27,6 +27,9 @@ venv/
 .DS_Store
 Thumbs.db
 
+# Tests
+tests/
+
 # Projects data
 apps/backend/projects/
 apps/frontend/projects/

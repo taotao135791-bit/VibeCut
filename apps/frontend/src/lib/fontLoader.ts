@@ -15,6 +15,16 @@ const GOOGLE_FONT_LOADERS: Record<string, () => Promise<FontModule>> = {
   PlayfairDisplay: () => import('@remotion/google-fonts/PlayfairDisplay') as Promise<FontModule>,
   Oswald: () => import('@remotion/google-fonts/Oswald') as Promise<FontModule>,
   BebasNeue: () => import('@remotion/google-fonts/BebasNeue') as Promise<FontModule>,
+  // Editorial / brutalist / display additions (DESIGN.md alignment)
+  SpaceMono: () => import('@remotion/google-fonts/SpaceMono') as Promise<FontModule>,
+  JetBrainsMono: () => import('@remotion/google-fonts/JetBrainsMono') as Promise<FontModule>,
+  Anton: () => import('@remotion/google-fonts/Anton') as Promise<FontModule>,
+  ArchivoBlack: () => import('@remotion/google-fonts/ArchivoBlack') as Promise<FontModule>,
+  LibreBodoni: () => import('@remotion/google-fonts/LibreBodoni') as Promise<FontModule>,
+  Newsreader: () => import('@remotion/google-fonts/Newsreader') as Promise<FontModule>,
+  CormorantGaramond: () => import('@remotion/google-fonts/CormorantGaramond') as Promise<FontModule>,
+  PublicSans: () => import('@remotion/google-fonts/PublicSans') as Promise<FontModule>,
+  Epilogue: () => import('@remotion/google-fonts/Epilogue') as Promise<FontModule>,
 };
 
 export async function ensureFontLoaded(fontId: string): Promise<void> {
