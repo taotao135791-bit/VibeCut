@@ -1,0 +1,15 @@
+{
+  "name": "builtin-promo",
+  "description": "Default promotional components shipped with VibeCut. Includes glass-morphism badges, countdown banners, pricing stages, CTA buttons, and full-page offer layouts with Lovart brand styling.",
+  "author": "VibeCut",
+  "version": "1.0.0",
+  "components": [
+    "OfferStage",
+    "PromoTopBar",
+    "PriceBadge",
+    "ReactionSticker",
+    "CountdownBanner",
+    "ModelRateGrid",
+    "CtaBadge"
+  ]
+}

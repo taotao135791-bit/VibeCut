@@ -1,0 +1,9 @@
+{
+  "name": "lovart-promo-v1",
+  "description": "Lovart 57% off promo MG — spring animated, staggered entries",
+  "components": [
+    "ClosingCard",
+    "HookCard",
+    "PriceBar"
+  ]
+}

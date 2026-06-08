@@ -1,0 +1,16 @@
+{
+  "name": "pro-toolkit",
+  "description": "Brand-agnostic production-grade creative components. All colors, fonts, and styles are parameterized — the agent decides everything at compose time. Includes: fullscreen hook, floating tags, ticker bar, countdown, price cards, CTA buttons, info grids, transitions, and watermarks.",
+  "version": "1.0.0",
+  "components": [
+    "SplashReveal",
+    "FloatingTag",
+    "TickerBar",
+    "CountdownBlock",
+    "PriceCard",
+    "CtaPill",
+    "InfoGrid",
+    "TransitionFlash",
+    "Watermark"
+  ]
+}

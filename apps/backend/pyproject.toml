@@ -1,0 +1,51 @@
+[project]
+name = "mrdv2-backend"
+version = "0.1.0"
+description = "VibeCut - AI Native Video Editing Backend"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+    "websockets>=14.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "python-multipart>=0.0.9",
+    "aiofiles>=24.0.0",
+    "jsonschema>=4.0.0",
+    "Pillow>=10.0.0",
+]
+
+[project.optional-dependencies]
+agent = [
+    "google-genai>=1.0.0",
+    "openai>=1.0.0",
+]
+asr = [
+    "faster-whisper>=1.1.0",
+]
+tts = [
+    "edge-tts>=6.1.0",
+]
+svg = [
+    "cairosvg>=2.7.0",
+]
+interchange = [
+    "opentimelineio>=0.17.0",
+    "otio-fcp-adapter>=1.0.0",
+]
+all = [
+    "google-genai>=1.0.0",
+    "openai>=1.0.0",
+    "faster-whisper>=1.1.0",
+    "edge-tts>=6.1.0",
+    "cairosvg>=2.7.0",
+    "opentimelineio>=0.17.0",
+    "otio-fcp-adapter>=1.0.0",
+]
+
+[project.scripts]
+dev = "uvicorn app.main:app --reload --host 0.0.0.0 --port 8000"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
