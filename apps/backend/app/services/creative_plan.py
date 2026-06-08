@@ -23,7 +23,7 @@ DEFAULT_PROMO_VISUAL_PACK = {
         "discount": "#F59E0B",
         "cta": "#E11D48",
         "text": "#F8FAFC",
-        "lovart_purple": "#8B5CF6",
+        "accent": "#8B5CF6",
     },
     "typography": {
         "heading": "DM Sans / Inter",
@@ -96,23 +96,26 @@ def _build_reusable_recipe(has_talking_head: bool, has_price_card: bool, has_vid
     duration_bucket = _duration_bucket(total_duration)
     if not has_video and has_price_card:
         scenes = [
-            _pct_scene("offer_first_card", 0.0, 0.45, "Make the discount undeniable immediately.", ["offer_stage"], ["57% Off"]),
-            _pct_scene("price_proof", 0.30, 0.78, "Show membership price and model-rate proof.", ["pricing_stage", "model_rate_grid"], ["Pro from $39/mo", "Ultimate from $99/mo"]),
-            _pct_scene("cta_close", 0.72, 1.0, "Close with concise CTA.", ["cta_badge"], ["Pay less. Create more with Lovart."]),
+            _pct_scene("offer_first_card", 0.0, 0.45, "Make the discount undeniable immediately.", ["offer_stage"], ["{{discount}}"]),
+            _pct_scene("price_proof", 0.30, 0.78, "Show membership price and model-rate proof.", ["pricing_stage", "model_rate_grid"], ["{{tier_1_price}}", "{{tier_2_price}}"]),
+            _pct_scene("cta_close", 0.72, 1.0, "Close with concise CTA.", ["cta_badge"], ["{{cta_text}}"]),
+
         ]
     elif has_talking_head:
         scenes = [
-            _pct_scene("reaction_hook", 0.0, 0.16, "Use the person's reaction as the emotional hook.", ["reaction_sticker", "promo_top_bar"], ["57% Off"]),
-            _pct_scene("proof_or_function", 0.16, 0.62, "Let speech or product footage carry proof; keep overlays off faces.", ["countdown_banner"], ["June 4 - June 12 UTC+0"]),
-            _pct_scene("offer_stack", 0.62, 0.86, "Bring price and model rates back after proof.", ["price_badge", "model_rate_grid"], ["Pro from $39/mo", "model rates"]),
-            _pct_scene("cta_close", 0.86, 1.0, "End with a purchase/creation CTA.", ["cta_badge"], ["Pay less. Create more with Lovart."]),
+            _pct_scene("reaction_hook", 0.0, 0.16, "Use the person's reaction as the emotional hook.", ["reaction_sticker", "promo_top_bar"], ["{{discount}}"]),
+            _pct_scene("proof_or_function", 0.16, 0.62, "Let speech or product footage carry proof; keep overlays off faces.", ["countdown_banner"], ["{{date_window}}"]),
+            _pct_scene("offer_stack", 0.62, 0.86, "Bring price and model rates back after proof.", ["price_badge", "model_rate_grid"], ["{{tier_1_price}}", "{{rates_summary}}"]),
+            _pct_scene("cta_close", 0.86, 1.0, "End with a purchase/creation CTA.", ["cta_badge"], ["{{cta_text}}"]),
+
         ]
     else:
         scenes = [
-            _pct_scene("instant_offer_hook", 0.0, 0.14, "Open with a full-page offer stage before returning to source footage.", ["offer_stage"], ["Lowest Price of the Year: 57% Off"]),
-            _pct_scene("urgency_window", 0.14, 0.40, "Show the date window and countdown while source footage breathes.", ["countdown_banner"], ["June 4 00:00 - June 12 00:00 UTC+0"]),
-            _pct_scene("value_proof", 0.40, 0.72, "Add membership or model-rate proof only after the hook lands.", ["price_badge", "model_rate_grid"], ["Pro from $39/mo", "Ultimate from $99/mo"]),
-            _pct_scene("cta_close", 0.72, 1.0, "Close with a compact CTA and avoid new information overload.", ["cta_badge"], ["Unlock full AI creative power at a lower price."]),
+            _pct_scene("instant_offer_hook", 0.0, 0.14, "Open with a full-page offer stage before returning to source footage.", ["offer_stage"], ["{{discount}} — {{headline}}"]),
+            _pct_scene("urgency_window", 0.14, 0.40, "Show the date window and countdown while source footage breathes.", ["countdown_banner"], ["{{date_window}}"]),
+            _pct_scene("value_proof", 0.40, 0.72, "Add membership or model-rate proof only after the hook lands.", ["price_badge", "model_rate_grid"], ["{{tier_1_price}}", "{{tier_2_price}}"]),
+            _pct_scene("cta_close", 0.72, 1.0, "Close with a compact CTA and avoid new information overload.", ["cta_badge"], ["{{final_cta_text}}"]),
+
         ]
 
     return {
@@ -175,7 +178,7 @@ def build_creative_plan(timeline: TimelineProject | None, brief: str) -> dict:
                 "media_intent": "creative_product_video" if not has_talking_head else "talking_head_video",
                 "fullscreen_effects": ["speed_lines_or_flash_on_offer_reveal"],
                 "component_effects": ["promo_top_bar", "price_badge"],
-                "copy_priority": ["57% Off", "Lowest Price of the Year"],
+                "copy_priority": ["{{discount}}", "{{headline}}"],
                 "avoid_regions": ["center_product_or_face"],
             }
         )
@@ -189,7 +192,7 @@ def build_creative_plan(timeline: TimelineProject | None, brief: str) -> dict:
                 "media_intent": "creative_product_video",
                 "fullscreen_effects": ["subtle_flash_at_transition"],
                 "component_effects": ["countdown_banner"],
-                "copy_priority": ["June 4 00:00 - June 12 00:00 UTC+0"],
+                "copy_priority": ["{{date_window}}"],
                 "avoid_regions": ["primary_subject", "existing_captions"],
             }
         )
@@ -201,11 +204,11 @@ def build_creative_plan(timeline: TimelineProject | None, brief: str) -> dict:
                 "id": "scene_price_card",
                 "start_sec": cursor,
                 "end_sec": cursor + 6.0,
-                "purpose": "Use the Lovart pricing card as proof; highlight Pro and Ultimate prices.",
+                "purpose": "Use the pricing card as proof; highlight membership tier prices.",
                 "media_intent": "price_card_image",
                 "fullscreen_effects": ["spotlight_on_price_column"],
                 "component_effects": ["promo_top_bar", "model_rate_grid", "cta_badge"],
-                "copy_priority": ["Pro from $39/mo", "Ultimate from $99/mo", "Seedance/Nano Banana/GPT Image model rates"],
+                "copy_priority": ["{{tier_1_price}}", "{{tier_2_price}}", "{{rates_summary}}"],
                 "avoid_regions": ["do_not_cover_price_numbers", "do_not_cover_primary_cta"],
             }
         )
@@ -221,7 +224,7 @@ def build_creative_plan(timeline: TimelineProject | None, brief: str) -> dict:
                 "media_intent": "generated_or_static_offer",
                 "fullscreen_effects": ["none"],
                 "component_effects": ["promo_top_bar", "price_badge", "countdown_banner"],
-                "copy_priority": ["57% Off", "Pay less. Create more with Lovart."],
+                "copy_priority": ["{{discount}}", "{{cta_text}}"],
                 "avoid_regions": ["safe_area_edges"],
             }
         )
@@ -241,7 +244,7 @@ def build_creative_plan(timeline: TimelineProject | None, brief: str) -> dict:
             "primary_path": "talking_head_reaction" if has_talking_head else "creative_product_or_price_card",
             "missing_inputs": [] if has_talking_head else ["talking_head_or_avatar_video"],
             "tone": "urgent premium promo",
-            "visual_system": "Lovart price-card purple, dark editorial overlays, high contrast offer typography",
+            "visual_system": "dark editorial overlays, high contrast offer typography, brand accent color",
             "duration_bucket": _duration_bucket(total_duration),
             "reusability_read": "Use normalized scene recipe and media analysis before placing effects; avoid fixed timestamps.",
         },

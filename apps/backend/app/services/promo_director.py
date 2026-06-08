@@ -17,15 +17,15 @@ from app.services.visual_qa import build_visual_qa_report
 
 
 DEFAULT_COPY = {
-    "hook": "Lowest Price of the Year: 57% Off!",
-    "reaction": "Lowest Discount of the Year: 57% Off\nMiss it, wait another year!",
-    "countdown": "June 4 00:00 - June 12 00:00 (UTC+0)\nCountdown: 05D 12H 00M",
-    "membership": "Pro from $39/mo\nUltimate from $99/mo",
-    "model_rates": "Seedance 2.0 from $0.018/sec\nNano Banana 2 from $0.018/img\nGPT Image 2 from $0.003/img",
-    "price_card": "57% OFF\nLowest confirmed price window of 2026",
-    "cta": "Pay less. Create more with Lovart.",
-    "final_cta": "Unlock full AI creative power at a lower price.",
-    "image_top": "Year's Best Deal: 57% Off · Miss It, Wait a Year",
+    "hook": "{{discount}} Off — Limited Time!",
+    "reaction": "{{discount}} Off\nDon't miss this window!",
+    "countdown": "{{start_date}} - {{end_date}}\nCountdown: {{remaining}}",
+    "membership": "{{tier_1_name}} from {{tier_1_price}}\n{{tier_2_name}} from {{tier_2_price}}",
+    "model_rates": "{{rate_line_1}}\n{{rate_line_2}}\n{{rate_line_3}}",
+    "price_card": "{{discount}}\n{{price_window_label}}",
+    "cta": "{{cta_text}}",
+    "final_cta": "{{final_cta_text}}",
+    "image_top": "{{banner_headline}}",
 }
 
 
@@ -212,12 +212,10 @@ def draft_promo_remix_timeline(
                 "callout",
                 "fullscreen",
                 text=(
-                    "Lowest Price of the Year\n"
-                    "57% Off\n"
-                    "June 4 00:00 - June 12 00:00 (UTC+0)\n"
-                    "Pro from $39/mo\n"
-                    "Ultimate from $99/mo\n"
-                    "Pay less. Create more with Lovart."
+                    f"{copy['hook']}\n"
+                    f"{copy['countdown']}\n"
+                    f"{copy['membership']}\n"
+                    f"{copy['cta']}"
                 ),
                 params=_params("offer_stage", color="#0F0F23", accent="#E11D48", preset="cinema_dark", anchor="center", motion="slide", intensity=1.0),
             )

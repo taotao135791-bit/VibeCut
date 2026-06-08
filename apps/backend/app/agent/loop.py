@@ -18,6 +18,9 @@ ensure_tools_registered()
 logger = logging.getLogger(__name__)
 
 MAX_ITERATIONS = 20
+# Temperature settings: lower for tool-calling (precision), higher for final text (creativity)
+TEMPERATURE_TOOL_CALL = 0.2
+TEMPERATURE_FINAL_RESPONSE = 0.7
 # Tools that require user interaction — agent loop must stop and return the message
 USER_FACING_TOOLS = {"ask_user", "present_plan"}
 
@@ -46,6 +49,9 @@ class ReActAgent:
             "content": user_message,
         })
 
+        # Trim history to stay within token budget
+        state.trim_history()
+
         system_prompt = build_system_prompt(state)
         tool_defs = registry.as_tool_defs()
 
@@ -61,7 +67,7 @@ class ReActAgent:
                     messages=state.conversation_history,
                     system_prompt=system_prompt,
                     tools=tool_defs,
-                    temperature=0.7,
+                    temperature=TEMPERATURE_TOOL_CALL,
                 )
             except Exception as e:
                 logger.error(f"LLM API error: {e}")
@@ -76,6 +82,7 @@ class ReActAgent:
 
             # If no tool calls, the agent is done — return text
             if not response.tool_calls:
+                # For final response, re-generate with higher temperature if text is empty/generic
                 final_text = response.text or "Sorry, I received an empty response. Please try again."
                 assistant_msg: dict = {"role": "assistant", "content": final_text}
                 if response.reasoning_content:

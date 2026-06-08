@@ -41,14 +41,6 @@
 
 ---
 
-## 预览
-
-![主界面](docs/image6.png)
-![时间线编辑](docs/image2.png)
-![导出](docs/image4.png)
-
----
-
 ## 快速开始
 
 ### 环境要求

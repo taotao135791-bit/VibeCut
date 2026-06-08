@@ -15,6 +15,13 @@ export default function ChatPanel() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
+  const EXAMPLE_PROMPTS = [
+    '把这个视频剪成30秒报音版本',
+    '加上中文字幕',
+    '用最精彩的画面开头',
+    '做一个促销混剪',
+  ];
+
   useEffect(() => {
     const ta = textareaRef.current;
     if (!ta) return;
@@ -74,8 +81,21 @@ export default function ChatPanel() {
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-3 space-y-3">
         {messages.length === 0 && (
-          <div className="text-zinc-500 text-sm">
-            Tell VibeCut how you'd like to edit your video.
+          <div className="space-y-3">
+            <div className="text-zinc-500 text-sm">
+              告诉 VibeCut 你想怎么剪辑视频。
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {EXAMPLE_PROMPTS.map((prompt, i) => (
+                <button
+                  key={i}
+                  onClick={() => { setInput(prompt); textareaRef.current?.focus(); }}
+                  className="text-xs px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-full text-zinc-300 transition-colors"
+                >
+                  {prompt}
+                </button>
+              ))}
+            </div>
           </div>
         )}
         {messages.map((msg, i) => (

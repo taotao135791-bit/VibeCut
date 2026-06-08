@@ -18,6 +18,35 @@ _THIS_DIR = Path(__file__).resolve().parent
 _BACKEND_DIR = _THIS_DIR.parent  # apps/backend/app/tools -> apps/backend/app
 _FRONTEND_PACKS_DIR = _BACKEND_DIR.parent.parent / "frontend" / "src" / "remotion" / "packs"
 
+# Security: patterns that must NOT appear in TSX component code
+_BLOCKED_CODE_PATTERNS = [
+    r'\bfetch\s*\(',           # no network requests
+    r'\bXMLHttpRequest\b',     # no network requests
+    r'\bimport\s*\(',          # no dynamic imports
+    r'\beval\s*\(',            # no eval
+    r'\bFunction\s*\(',        # no Function constructor
+    r'dangerouslySetInnerHTML', # no raw HTML injection
+    r'\brequire\s*\(',         # no require
+    r'\bprocess\.',            # no process access
+    r'\b__dirname\b',          # no filesystem access
+    r'\b__filename\b',
+    r'from\s+[\'"]https?://',  # no remote imports
+    r'import\s+.*from\s+[\'"]https?://',
+]
+_BLOCKED_RE = [re.compile(p) for p in _BLOCKED_CODE_PATTERNS]
+
+
+def _validate_tsx_code(code: str, name: str) -> str | None:
+    """Validate TSX code for security. Returns error message or None if safe."""
+    for pattern in _BLOCKED_RE:
+        match = pattern.search(code)
+        if match:
+            return (
+                f"Component '{name}' contains blocked pattern: '{match.group()}'. "
+                f"Network requests, eval, dynamic imports, and dangerouslySetInnerHTML are not allowed."
+            )
+    return None
+
 
 def _sanitize_name(name: str) -> str:
     """Ensure pack/component names are safe for filesystem use."""
@@ -95,6 +124,11 @@ async def register_creative_pack(args: dict, state) -> dict:
             return {"error": "Each component must have a non-empty 'name'"}
         if not code or not isinstance(code, str):
             return {"error": f"Component '{name}' must have non-empty 'code' string"}
+
+        # Security: validate code before writing
+        security_error = _validate_tsx_code(code, name)
+        if security_error:
+            return {"error": security_error}
 
         # Write the component file
         file_path = pack_dir / f"{name}.tsx"

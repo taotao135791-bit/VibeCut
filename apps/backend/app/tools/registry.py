@@ -3,8 +3,11 @@ provides tool definitions in a provider-agnostic format."""
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from typing import Any, Callable, Awaitable
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -56,6 +59,7 @@ class ToolRegistry:
         try:
             return await handler(args, state)
         except Exception as e:
+            logger.exception(f"Tool '{name}' raised an exception")
             return {"error": f"Tool '{name}' failed: {str(e)}"}
 
     @property
