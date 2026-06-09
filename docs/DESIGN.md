@@ -1,267 +1,220 @@
-# VibeCut · Visual Direction (DESIGN.md)
+# VibeCut - Visual Direction (DESIGN.md)
 
-> **Single source of truth for ALL visual decisions made by the VibeCut agent and any human contributor.**
-> 优先级：**本文件 > prompt > 直觉**。任何 promo / ad / kinetic-type / motion 视频在动手前必须读这一份。
->
-> 综合自：[Anthropic skills/frontend-design](https://github.com/anthropics/skills/tree/main/skills/frontend-design) · [nexu-io/html-video](https://github.com/nexu-io/html-video) (21 模板) · [ui-ux-pro-max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) · [garrytan/gstack](https://github.com/garrytan/gstack)
+> Single source of truth for visual decisions. Your design language is NOT pre-set here --
+> it is derived fresh from each brand's real visual DNA using the method below.
 
 ---
 
-## 0. 第一性原理（不可妥协）
+## 0. Three Guarantees
 
-> **Refuse generic AI aesthetics. Commit to a BOLD direction. Execute with precision.** — Anthropic frontend-design
+Every deliverable must pass all three:
 
-平庸来自"什么都想要"。每一支视频在第一秒就必须能让观众回答："这是哪一种世界？"  
-不要在中间地带——要么极简到只剩一个动作（Exaggerated Minimalism），要么密度爆炸到信息溢出（Editorial Brutalism）。**对中庸说不。**
-
-### 反 AI-Slop 黑名单（出现一项即重做）
-
-| ❌ 禁止 | ✅ 替代 |
-|---|---|
-| `Inter` / `Roboto` / `Arial` / `system-ui` 当主标 | Bebas Neue · Anton · Playfair Display · Libre Bodoni · Space Mono · Cormorant Garamond |
-| `Space Grotesk`（已被烂大街） | Newsreader / Public Sans / Epilogue |
-| 紫蓝渐变（"AI 紫"）+ 白底 | 黑底 + 单 sharp accent；或 OLED 纯黑 + 数据色绿 |
-| 4 种以上 hero 配色，每色平均分布 | **1 dominant + 1 sharp accent**，accent 占比 ≤ 8% |
-| 通片居中对齐 | 左对齐 baseline 锚定，破对称，刻意右溢出 |
-| 标准 FullCard 全屏卡 + emoji 装饰 | 错位 lockup / Bento grid / pull quote / drop cap |
-| 通片淡入淡出 | Staggered reveal（letter-by-letter / word-by-word / number ticker） |
-| 单层主体 | RGB chromatic split 错位 + grain noise + scanline |
-| 永久居中的字幕角标 | File mark + frame counter + ticker，三种位置共存 |
+- **EFFICACY** -- viewer remembers ONE message within 3 seconds. Key copy appears >=2 times. CTA holds >=1.5s.
+- **AESTHETIC** -- frame is physically harmonious: no text overflow, no collision, breathing room >= 62%, ink area <= 38%.
+- **UNIVERSALITY** -- the same method (Token Extraction + Synthesis) produces different visual outcomes for different brands. If it only works for one style, it's broken.
 
 ---
 
-## 1. 如何合成一个方向（不是选，是生）
+## 0.5 Craft Quality Baseline (what separates "produced" from "wireframe")
 
-> 任何从固定清单里“选”一个方向的行为，本身就是 AI-slop。本节不提供选项，只提供**合成公式**。每一次 promo / ad / motion 项目都必须现场生成一个**不可复用、不可被下一个项目复粘**的独一无二方向。
+These apply to ALL videos regardless of brand tokens, style, or decoration density. They are the difference between a PM prototype and an agency deliverable.
 
-### 公式 · INFLUENCE × COUNTER × VERB
+| Principle | Rule | Why |
+|---|---|---|
+| **Rhythm engineering** | Never cut duration into equal slices. Tension curve: intro 0-15%, buildup 15-50%, climax 50-75%, resolve 75-100%. Visual climax at 60-70% mark. Variable chapter length (2s / 3-4s / 5s). | Equal slices = no drama = boring. |
+| **Silence as design** | 0.3-0.8s of pure black between chapters. Pre-climax: 0.6-1.0s. Pre-CTA: 0.5s. | Black frames are punctuation. They carry emotional weight. |
+| **Micro-timing** | Headline at chapter_start + 0.2s. Sub at headline + 0.3s. Sub exits at chapter_end - 0.3s. Headline exits at chapter_end - 0.1s. Diamond shape: gap-headline-both-sub_exits-headline-gap. | Simultaneous = cheap. Stagger = cinematic. |
+| **Scale hierarchy** | headline:sub = 1.6-2.0x. Largest size only 1-2 times per video (climax). Normal frames use medium. | Random sizes = no design. Ratio = intention. |
+| **Position micro-drift** | y varies +-2-4% per chapter. Intro: 0.46. Normal: 0.48-0.52 alternating. Climax: 0.42. CTA: 0.54. | Static position = surveillance camera. Drift = breathing. |
+| **Density wave** | Alternate high-info frames (2-3 elements) with breathing frames (0-1). Pattern is uneven, not uniform. | Uniform density = wallpaper. Wave = rhythm. |
+| **Layout harmony** | No overflow (all elements within [5%,95%] canvas). No occlusion (min 80px vertical gap between text layers). Consistent alignment per scene. Transitions only overlap gaps, never content. Components self-contain their layout. | Chaos = amateur. Harmony = produced. |
 
-```
-     ≥3 个跨媒介、跨时代、跨学科的 non-obvious 影响源
-  ×  1 个 counter-convention（本行业 / 本媒介里没人这么干）
-  ×  1 个 verb metaphor（这支作品在做什么动作）
-  =  一句话、一次性、不可复用的方向
-```
+---
 
-### Step 1 · 采集 ≥3 个 non-obvious 影响源
+## 1. Brand Design Token Extraction (R1 -- the core)
 
-最首出出现的参考不计。AI 模型广告里“Wired 赛博 / 紫蓝渐变 / Tron / The Matrix” 一律拒使。打开以下六个面向，每面向抽一到两个项目。下表永远 mutable：
+When a brand is mentioned, fetch their homepage and extract 7 structured tokens from the **real CSS / layout**:
 
-| 面向 | 点火词（仅启发） |
+| # | Token | What to extract | Video mapping |
+|---|---|---|---|
+| 1 | `type_scale` | Font sizes actually used (e.g. `[12, 14, 24]` px) | Multiply by `canvas_height / 200`. Example: web `[12,14,24]` -> video `[65, 75, 130]` for 1080p |
+| 2 | `weight_range` | Font-weight values (e.g. `[400, 600]`) | Use directly. If brand uses 600, do NOT escalate to 900. |
+| 3 | `spacing_grid` | Base unit (e.g. `8px`, multiples `4/8/16/24/32`) | Map to `position_y` differences between elements |
+| 4 | `color_depth` | Strategy: `rgba-transparency-stack` / `solid-accent` / `gradient-mesh` / `monochrome` | Determines fill approach for all elements |
+| 5 | `radius_system` | Corner radii (e.g. `[0, 16, 9999]`) | Informs visual softness / sharpness of the world |
+| 6 | `decoration_density` | `0`=none / `1`=minimal / `2`=moderate / `3`=heavy | **This decides what layers exist in the timeline** (see below) |
+| 7 | `primary_tension` | Where visual interest comes from | Determines composition strategy for each frame |
+
+### decoration_density guide
+
+| Level | What it means in the timeline |
 |---|---|
-| 电影 / 影像 | Tarkovsky / Wong Kar-wai / 80s VHS / NHK 误播 / Apple Keynote 2007 / La Jetée / 香港 90s 黑帮片 / Criterion 封面 |
-| 出版 / 平面 | Emigre / Wired Issue 1 / Penguin 古典 / Bauhaus Dessau 书 / 《新青年》 / 1970s 民航发车表 |
-| 艺术 · 运动 | 构成主义 / Memphis 1981 / Vorticism / 佐藤茧海报 / 包豪斯 / Op Art |
-| 物理 / 材质 | 火车站翻牌字 / 金属压印 / 报纸油墨渗透 / 玻璃上冷凝 / 蜡封压印 / 打字机色带 |
-| 街头 · 次文化 | 香港茶餐厅菜单 / Punk zine / 朝鲜官媒报头 / 70s 中全会会场布置 |
-| 技术 · 伪装 | DOS BIOS / Bloomberg Terminal / IBM 8086 / 火车站机械式发车表 / Telex 电传机 |
+| 0 (none) | No ticker, no file-mark, no chromatic split, no ornament. Only text + background. Maximum whitespace. (e.g. Moonshot, Apple) |
+| 1 (minimal) | One subtle persistent element (small watermark or single corner mark). Clean. |
+| 2 (moderate) | Chrome layer: file marks + counters. Maybe one ticker. |
+| 3 (heavy) | Full editorial density: ticker + marks + chromatic split + grain + scanlines. (e.g. news broadcast, data dashboards) |
 
-### Step 2 · 选一个 counter-convention
+### primary_tension types
 
-三问自己：
+| Type | What it means for composition |
+|---|---|
+| `full-bleed-media + text-overlay` | Large image/video fills frame. Text overlaid on gradient scrim. Minimal elements per frame. |
+| `typography-clash` | Visual interest from font size contrast, unexpected type pairings, spatial tension between words. |
+| `color-block` | Bold solid-color regions create structure. Text lives inside blocks. |
+| `motion-only` | Frames are static/minimal; all interest comes from how things enter/exit. |
+| `data-density` | Many simultaneous data points, numbers, grids -- the density IS the aesthetic. |
 
-1. 本行业 / 本题材默认长什么样？列出 3 个。
-2. 哪一项反起来最狮胆？那就是本项目的 *counter*。
-3. counter 与 Step 1 的影响源产生什么化学反应？
+**Document tokens in script frontmatter as `brand_tokens:`.** Every layout decision must trace back to one of these 7 tokens. If it can't, it shouldn't exist.
 
-示例：AI 模型默认 = RGB 玻璃 / 未来感 / 紫蓝。**counter** = “用 1972 原子能机构技术报告书的鋼印黑白报头”。
+---
 
-### Step 3 · 用一个 verb metaphor 收拢
+## 2. Direction Synthesis (INFLUENCE x COUNTER x VERB)
 
-不要“名词 + 名词”（那只是标签）。用一个动词：
+After extracting tokens, synthesize a unique direction:
 
-- *Stamping a model spec onto a press wire dispatch*
-- *Tuning a long-wave radio that finally locks onto signal*
-- *Pressing wax over a court transcript*
-- *Pinning a leaflet to the leaving-train timetable*
+1. Collect >=3 non-obvious influences. One MUST be the brand's own DNA (from token extraction). Others are cross-medium, cross-era, cross-discipline references.
+2. Pick 1 counter-convention (what this brand/industry never does).
+3. Frame as 1 verb metaphor (what this video IS DOING, not what it LOOKS LIKE).
 
-一句话能说清，才能被身体领会。
-
-### 输出格式（必填在脚本 frontmatter）
-
+Emit in frontmatter:
 ```yaml
-direction_id: "<slug-unique-to-this-project>"     # 例：k26-press-dispatch
-influences:                                       # ≥3
-  - "1972 IAEA technical report typesetting"
-  - "NHK 误播黑白道歉字幕 1989"
-  - "Manhattan Project declassified memo"
-counter_convention: "拒绝今天 AI 模型默认的 RGB 玻璃 + 紫蓝渐变"
-verb_metaphor: "Stamping a model spec onto a press wire dispatch"
-palette: { dom: "#0a0a0a", text: "#e8e6e1", accent: "#b81d13", data: "#f4d35e" }
-type_pair: { display: "playfair-display", caps: "bebas-neue", mono: "jetbrains-mono", body: "newsreader" }
-```
-
-### 合成范例（展示“每次都不重样”是什么意思）
-
-以下三个示例均为 *Kimi K2.6 30s ad* 这一同一题目生成 —— 你看到三种完全不同的世界，就明白为什么不能预存为清单：
-
-- **k26-press-dispatch** = `IAEA 1972 报告` + `火车站发车表翻牌` + `Telex 电传` × 反 RGB 玻璃 × *Stamping spec onto press wire*
-- **k26-cantonese-tea-receipt** = `香港茶餐厅菜单` + `Wong Kar-wai 抽帧` + `Hong Kong neon 霉玻璃` × 反企业发布会 × *Folding the model into a midnight 饭后 order*
-- **k26-supreme-court-stamp** = `Constructivist 招贴` + `蜡封压印` + `Bloomberg Terminal` × 反 Apple Keynote × *Pressing wax onto a verdict*
-
-三个用同一公式生成、不可互换、下一个项目都不能复粘。**这才是“持续创造”。**
-
-### 反退退机制（防止隐形收敛到“7 选 1”）
-
-任何 promo 提交前，agent 必须检查上一个项目的 `direction_id`。若本项目 `direction_id` 与其 influence 集合与上一个重复率 ≥ 50%，需发起一轮 *re-roll*：重新走 Step 1。2 次 re-roll 不能解决则告警人类。
-
----
-
-## 2. 排版工程（Type Engineering）
-
-### 模数化字号节奏（Modular Scale, ratio 1.5）
-
-```
-caption  18  ← file mark / frame counter / 注脚来源
-body     22  ← italic 注脚（Merriweather / Public Sans）
-eyebrow  28  ← 章节小标 caps（letter-spacing 0.6em）
-strap    44  ← 副标题 caps（letter-spacing 0.4em）
-display 120  ← 段落主标
-hero    240  ← lockup（双层叠加）
-mega    480  ← 巨型数字（单数字段）
-mega+   720  ← 占帧主标（仅冷开场使用）
-```
-
-**规则**：每一帧最多出现 **3 个字号档位**。例如 `mega + eyebrow + caption`，不要四个或更多。  
-**对齐**：默认 `text-align: left`，position_x 锚定 0.10 / 0.50 / 0.90 三档之一，避免 0.5 永居中。
-
-### Letter-spacing 哲学
-
-- **巨型字（≥ display）**：负字距 `-0.05em ~ -0.08em`，让字"咬合"  
-- **caps 标签（eyebrow / strap）**：正字距 `0.4em ~ 1.0em`，制造"广播感"  
-- **body / caption**：默认 `0`，italic 时 `0.02em` 微撑
-
----
-
-## 3. 颜色契约（Color Contract）
-
-> **Dominant + Sharp accent + 数据色（可选）≤ 3 种**
-
-| 角色 | 占比目标 | 用途 |
-|---|---|---|
-| Dominant | ≥ 70% | 背景 + 主色块 |
-| Text | 8–15% | 主标 / 副标 / 注脚 |
-| Sharp accent | 3–8% | 章节小标 / 下划线 / file mark / 一处关键状语 |
-| Data color | ≤ 4% | 仅出现在数字、ticker、计量单位 |
-
-**禁止**：4 色及以上的彩虹堆叠；同一帧出现两种 accent。
-
----
-
-## 4. 时间编排（Motion Choreography）
-
-### 进场节奏（per-shot）
-
-每一镜的进场遵循 **0.18 / 0.40 / 0.60 / 0.85** 四阶段：
-
-```
-0.00s  cut-in flash 0.15s（RGB split + 反白 1 帧）
-0.18s  eyebrow / file mark 出场
-0.40s  display 主标进场（staggered letter or word-by-word）
-0.60s  big number ticker / accent underline
-0.85s  body / footnote 进场，shot 进入稳态
-```
-
-### 章节切换
-
-- **0.15s glitch flash**（白色 + RGB 偏移 ±0.6%）替代普通淡入淡出  
-- 切换瞬间允许同帧出现新旧 file mark（`FILE 002 ▸ 003`）
-
-### 速率曲线
-
-- 巨型字进场：`cubic-bezier(0.22, 1, 0.36, 1)` 0.4s（"out-quint"，强烈减速）  
-- ticker 数字滚动：递减步长（10 → 6 → 3 → 1 帧）模拟物理减速  
-- 永远不要使用 `linear` 在前景元素上
-
----
-
-## 5. 空间编排（Spatial Composition）
-
-> **Asymmetry over symmetry. Grid-breaking over grid-fitting.**
-
-- **三轴锚点**：每一帧的元素 position 必须落在 `0.10 / 0.50 / 0.90` 三档（横） × `0.07 / 0.18 / 0.50 / 0.82 / 0.94` 五档（纵）网格中，禁止任意小数。  
-- **每一帧至少一处破对称**：file mark 在左上 + frame counter 在右上 + 主体故意偏一侧。  
-- **Bento Grid 层级**：当一镜要展示 3+ 信息时，强制三栏 Bento（`x = 0.18 / 0.50 / 0.82`），不要堆在中央。  
-- **角标位三件套**（必须有）：`FILE 0XX / NNN`（左上）+ `00:SS — CHAPTER NAME`（右上）+ ticker（顶部贯穿或底部贯穿）
-
----
-
-## 6. 视觉密度层（Density Layers）
-
-> 单层 = AI slop。视觉品味来自层叠组织。
-
-每一段广告/promo 的 timeline **至少叠 3 层**：
-
-1. **主层（main display）**：巨型字 / 巨型数字 / 主体 lockup  
-2. **RGB split 层 ×2**：与主层同位偏 ±0.6%，颜色 `#FF003C` + `#00E5FF`，opacity 0.78–0.85  
-3. **章节信息层**：file mark + frame counter + eyebrow  
-4. **贯穿层（30s 全程）**：顶部 ticker + 底部 ticker + cinematic_bars（仅 cinematic 方向）  
-5. **过渡层**：每段切换 flash（0.15s）+ 偶发 speed_lines / spotlight
-
----
-
-## 7. Component Pack 选用矩阵
-
-> 调用 pro-toolkit 时优先看这张表，避免乱用 FullCard。
-
-| 场景 | 选 | 不要选 |
-|---|---|---|
-| 冷开场 / 标题 lockup | 多条 subtitle 轨道叠加 + RGB split | FullCard（太居中） |
-| 章节切换 | `TransitionFlash` + glitch flash | 普通 fade |
-| 大数字揭示 | subtitle 巨型字 + accent underline | InfoGrid |
-| 三栏特性 | `InfoGrid` 或自定义 Bento | 三个 FullCard 接连 |
-| 贯穿信息 | `TickerBar` (top + bottom) | 静态 watermark |
-| 倒计时 | `CountdownBlock` | 数字 + 普通字幕 |
-| 价格 / 优惠 | `PriceCard` | 自由排版 |
-| CTA | `CtaPill` 或 `BottomStrip` | FullCard impact |
-| 收尾 logo | 自由排版 + cursor `▌` 闪烁 | SplashReveal（通用） |
-
----
-
-## 8. Pre-Render Checklist（agent 自查 / 人审）
-
-提交一个 promo / ad timeline 前，逐项过：
-
-```
-[ ] 已在文件头声明 BOLD 方向（A–G 之一）
-[ ] 主色 ≤ 3，accent 占比 ≤ 8%
-[ ] 字体清单不含 Inter / Roboto / Arial / Space Grotesk
-[ ] 至少 3 层视觉密度（main + chrome split + chapter info）
-[ ] 每镜元素 position 落在 0.10/0.50/0.90 × 0.07/0.18/0.50/0.82/0.94 网格
-[ ] 至少一处破对称（file mark / 角标 / 数字偏移）
-[ ] 章节切换有 0.15s flash 而非淡出
-[ ] 巨型字 letter-spacing 负值；caps 标签字距 ≥ 0.4em
-[ ] 字号档位 per-shot ≤ 3 档
-[ ] 顶部 / 底部 ticker 至少其一贯穿（≥ 80% 时长）
-[ ] 进场使用 staggered（letter / word / number），不是整体 fade
-[ ] 4.5:1 文本对比；data color 仅出现在数字
+direction_id: <unique-slug>
+brand_tokens:
+  type_scale: [65, 75, 130]
+  weight_range: [400, 600]
+  spacing_grid: 8
+  color_depth: rgba-transparency-stack
+  radius_system: [0, 16, 9999]
+  decoration_density: 0
+  primary_tension: full-bleed-media + text-overlay
+influences:
+  - <brand DNA from tokens>
+  - <cross-medium reference>
+  - <cross-era reference>
+counter_convention: <one line>
+verb_metaphor: <one verb-led sentence>
+palette:
+  dom: <hex>
+  text: <hex>
+  accent: <hex>
 ```
 
 ---
 
-## 9. CLI 速查（让 agent 自助查表）
+## 3. Canvas Physics (R2 -- never skip)
 
-```bash
-# 任何新选题 / 行业，先生成对照设计系统
-python3 ~/.qoder/skills/ui-ux-pro-max/scripts/search.py "<topic>" --design-system -p "<name>" -f markdown
+These are physical constraints, not style preferences:
 
-# 字体回退查询（替代 Inter/Roboto）
-python3 ~/.qoder/skills/ui-ux-pro-max/scripts/search.py "editorial brutalist display" --domain typography
+| Constraint | Rule |
+|---|---|
+| Safe area | All elements within `x=[0.05, 0.95]`, `y=[0.05, 0.95]` |
+| Overflow guard | `estimated_text_width <= 0.85 * canvas_width`. If exceeded: shrink font or break line. |
+| Ink-area budget | Simultaneously-visible elements bbox <= 38% of frame area |
+| 5-region balance | TL / TR / C / BL / BR -- use <= 3 per shot |
+| Min element gap | Non-overlapping elements >= 18px apart |
 
-# 风格命中
-python3 ~/.qoder/skills/ui-ux-pro-max/scripts/search.py "kinetic typography motion" --domain style
+### Text width estimation formula
+
+```python
+def estimate_width(text: str, font_size: int) -> float:
+    w = 0
+    for ch in text:
+        if '\u4e00' <= ch <= '\u9fff': w += font_size * 1.0   # CJK
+        elif ch.isupper():             w += font_size * 0.65  # uppercase
+        elif ch.isdigit():             w += font_size * 0.60  # digits
+        elif ch == ' ':                w += font_size * 0.30  # space
+        else:                          w += font_size * 0.50  # lowercase
+    return w
+```
+
+If `estimate_width(text, size) > canvas_width * 0.85`: auto-shrink `size = int(size * 0.85 * canvas_width / estimated)`.
+
+---
+
+## 4. Anti-AI-Slop (truly universal -- NOT style preferences)
+
+These are the ONLY universal prohibitions. Everything else depends on brand tokens.
+
+| Prohibited | Why |
+|---|---|
+| Using `inter` / `roboto` / `arial` as headline **when brand does NOT use them** | Lazy default, not a design choice |
+| >= 4 hero colors evenly distributed | No hierarchy = no design |
+| "AI purple" gradient on white | Cliche default of every AI product |
+| Every shot identical layout | Indicates no thought per frame |
+| Single FullCard repeated for entire video | Zero compositional effort |
+
+Note: center-alignment, serif fonts, decorative layers, tickers -- these are NOT inherently bad. They are wrong only when they contradict the brand's tokens. If the brand IS center-aligned (like Moonshot), then center-align.
+
+---
+
+## 5. Component Pack Reference
+
+Available components in `pro-toolkit/` (use when appropriate, not mandatory):
+
+| Component | Good for |
+|---|---|
+| `FullCard` / `SplashReveal` | Title reveals, chapter openers (when decoration_density >= 2) |
+| `TickerBar` | Persistent info strip (when decoration_density >= 2) |
+| `TransitionFlash` | Hard cuts between chapters |
+| `InfoGrid` | Multi-column data display |
+| `PriceCard` | Pricing information |
+| `CtaPill` / `BottomStrip` | Call-to-action overlays |
+| `CountdownBlock` | Timer/urgency |
+
+Selection rule: **only use components that match the brand's `decoration_density` token.** If density=0, use none of these -- just subtitle clips with appropriate styling.
+
+---
+
+## 6. Pre-Render Checklist
+
+```
+-- Three Guarantees --
+[ ] Key message sticks at 3s
+[ ] CTA holds >= 1.5s
+[ ] Key copy appears >= 2 times
+[ ] ink area <= 38% on all frames
+
+-- Token Compliance --
+[ ] All font sizes derived from brand type_scale (not hardcoded)
+[ ] Font weight matches brand weight_range
+[ ] Decoration density matches brand token (0=clean, 3=heavy)
+[ ] Color approach matches brand color_depth
+[ ] No text exceeds 85% canvas width (overflow guard passes)
+[ ] Safe area respected (x/y within [0.05, 0.95])
+[ ] <= 3 of 5 regions used per shot
+
+-- Direction --
+[ ] direction_id declared in frontmatter
+[ ] brand_tokens block present with all 7 values
+[ ] >= 3 influences listed (one is brand DNA)
+[ ] Unique from last project (>= 2 different influences)
+
+-- Universal Anti-Slop --
+[ ] No Inter/Roboto/Arial headline unless brand actually uses it
+[ ] No >= 4 evenly-distributed hero colors
+[ ] Not every shot identical layout
+[ ] 4.5:1 text contrast ratio
 ```
 
 ---
 
-## 10. CEO / Designer / Eng 三视角 Review（gstack 模式）
+## 7. Token-to-Video Mapping Quick Reference
 
-发布前问自己：
+| Web token | Video equivalent |
+|---|---|
+| font-size 12px | `12 * (1080/200)` = 65px |
+| font-size 14px | 75px |
+| font-size 24px | 130px |
+| font-size 32px | 173px |
+| font-weight 600 | Use 600 (not bold) |
+| spacing 8px | position_y difference ~0.04 (= 43px / 1080) |
+| spacing 16px | position_y difference ~0.08 |
+| spacing 32px | position_y difference ~0.16 |
+| rgba(0,0,0,0.7) | subtitle background with 70% opacity |
+| border-radius 16px | Not applicable in video (no cards) unless using effect components |
 
-- **CEO**：观众看完能复述出**一个**记忆点吗？（3 秒规则）  
-- **Designer**：哪一个像素是这一帧的"signature"？如果说不出来，重做。  
-- **Eng**：渲染时长、字体加载、字号超界（超过 720pt 已经压力）有问题吗？  
+The mapping ratio `canvas_height / 200` works because web content is typically viewed at ~900px viewport height, and video at 1080px full-screen -- the ratio accounts for viewing distance difference.
 
 ---
 
-> 修改本文件等价于修改全局视觉契约 —— 修改前请在 PR 注明影响范围。
+> This file defines METHOD, not STYLE. Style comes from the brand.

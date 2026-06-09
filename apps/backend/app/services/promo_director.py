@@ -67,11 +67,11 @@ def _style(anchor: str, *, width: float, height: float) -> VideoStyle:
 def _params(
     component_type: str | None,
     *,
-    color: str = "#0F0F23",
-    accent: str = "#8B5CF6",
-    preset: str = "cinema_dark",
+    color: str = "#09090b",
+    accent: str = "DERIVE_FROM_BRAND",
+    preset: str = "director_driven",
     anchor: str = "center",
-    motion: str = "pop",
+    motion: str = "slide",
     intensity: float = 0.9,
     safe_area: float = 0.05,
 ) -> EffectParams:

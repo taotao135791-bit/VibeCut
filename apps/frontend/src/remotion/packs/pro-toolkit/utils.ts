@@ -101,9 +101,12 @@ export function adaptiveSize(text: string, base: number, min: number, containerW
   return Math.max(min, base - penalty);
 }
 
+// impeccable: Inter is flagged as OVERUSED_FONT (the #1 AI tell).
+// taste-skill: "Discouraged as default: Inter. Pick Geist, Outfit, Cabinet Grotesk, Satoshi first."
+// Using Epilogue (modern geometric, not in any overused list) as display default.
 export const FONT = {
-  display: "'Inter', 'SF Pro Display', system-ui, sans-serif",
-  body: "'Inter', 'SF Pro Text', system-ui, sans-serif",
+  display: "'Epilogue', 'SF Pro Display', system-ui, sans-serif",
+  body: "'Outfit', 'SF Pro Text', system-ui, sans-serif",
   mono: "'JetBrains Mono', 'SF Mono', monospace",
 };
 

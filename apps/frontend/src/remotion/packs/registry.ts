@@ -15,6 +15,7 @@ import type { PackComponent } from './types';
 import * as builtinPromo from './builtin-promo/index';
 import * as proToolkit from './pro-toolkit/index';
 import * as lovart_promo_v1 from './lovart-promo-v1/index';
+import * as cinemaPack from './cinema-pack/index';
 // __PACK_IMPORTS__
 
 class PackRegistry {
@@ -25,6 +26,7 @@ class PackRegistry {
     this.registerPack('builtin-promo', builtinPromo as Record<string, unknown>);
     this.registerPack('pro-toolkit', proToolkit as Record<string, unknown>);
         this.registerPack('lovart-promo-v1', lovart_promo_v1 as Record<string, unknown>);
+    this.registerPack('cinema-pack', cinemaPack as Record<string, unknown>);
     // __PACK_REGISTRATIONS__
   }
 

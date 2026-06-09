@@ -1,4 +1,4 @@
-import { AbsoluteFill, Sequence, Video, OffthreadVideo, Audio, Img, useVideoConfig, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, Sequence, Video, OffthreadVideo, Audio, Img, useVideoConfig, useCurrentFrame, interpolate } from 'remotion';
 import type { TimelineProject, Clip as ClipType, VideoStyle, SubtitleStyle } from '@mrdv2/shared';
 import { resolveSubtitleStyle, DEFAULT_SUBTITLE_STYLE, resolveCssFontFamily } from '@mrdv2/shared';
 import { resolveMediaUrl, getMediaType } from '../lib/timelineAdapter';
@@ -8,6 +8,7 @@ import { EditableText } from './EditableText';
 import { useAppStore } from '../stores/appStore';
 import { parseAssOverrides } from '../lib/assOverrides';
 import { packRegistry } from './packs/registry';
+import { ease as gsapEase } from './packs/cinema-pack/gsap-utils';
 
 /** Build CSS properties from a fully resolved SubtitleStyle. */
 function subtitleStyleToCss(s: Required<SubtitleStyle>): React.CSSProperties {
@@ -51,7 +52,8 @@ const SrtSubtitleClip: React.FC<{
   clip: ClipType;
   timeline: TimelineProject;
   fps: number;
-}> = ({ clip, timeline, fps }) => {
+  durationFrames: number;
+}> = ({ clip, timeline, fps, durationFrames }) => {
   const frame = useCurrentFrame();
   const resolved = useResolvedStyle(clip);
   const [entries, setEntries] = useState<SrtEntry[]>([]);
@@ -79,8 +81,16 @@ const SrtSubtitleClip: React.FC<{
   const renderedText = useMemo(() => active ? parseAssOverrides(active.text) : null, [active?.text]);
   if (!active) return null;
 
+  // Motion: same enter/exit as InlineSubtitleClip
+  const ENTER_FRAMES = Math.min(8, Math.floor(durationFrames * 0.3));
+  const EXIT_FRAMES = Math.min(4, Math.floor(durationFrames * 0.15));
+  const enterOpacity = interpolate(frame, [0, ENTER_FRAMES], [0, 1], { extrapolateRight: 'clamp' });
+  const enterY = interpolate(frame, [0, ENTER_FRAMES], [14, 0], { extrapolateRight: 'clamp' });
+  const exitOpacity = interpolate(frame, [durationFrames - EXIT_FRAMES, durationFrames], [1, 0.6], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' });
+  const opacity = Math.min(enterOpacity, exitOpacity);
+
   return (
-    <AbsoluteFill>
+    <AbsoluteFill style={{ opacity, transform: `translateY(${enterY}px)` }}>
       <div style={subtitleStyleToCss(resolved)}>
         {renderedText}
       </div>
@@ -92,13 +102,38 @@ const SrtSubtitleClip: React.FC<{
 const InlineSubtitleClip: React.FC<{
   clip: ClipType;
   isSSR: boolean;
-}> = ({ clip, isSSR }) => {
+  durationFrames: number;
+}> = ({ clip, isSSR, durationFrames }) => {
+  const frame = useCurrentFrame();
   const resolved = useResolvedStyle(clip);
   const textCss = subtitleStyleToCss(resolved);
   const renderedText = useMemo(() => parseAssOverrides(clip.subtitle_text!), [clip.subtitle_text]);
 
+  // Motion: enter (up to 8 frames) + exit (up to 4 frames)
+  const ENTER_FRAMES = Math.min(8, Math.floor(durationFrames * 0.3));
+  const EXIT_FRAMES = Math.min(4, Math.floor(durationFrames * 0.15));
+
+  const enterOpacity = interpolate(frame, [0, ENTER_FRAMES], [0, 1], {
+    extrapolateRight: 'clamp',
+  });
+  const enterY = interpolate(frame, [0, ENTER_FRAMES], [14, 0], {
+    extrapolateRight: 'clamp',
+  });
+  const exitOpacity = interpolate(
+    frame,
+    [durationFrames - EXIT_FRAMES, durationFrames],
+    [1, 0.6],
+    { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
+  );
+  const opacity = Math.min(enterOpacity, exitOpacity);
+
+  const motionStyle: React.CSSProperties = {
+    opacity,
+    transform: `translateY(${enterY}px)`,
+  };
+
   return (
-    <AbsoluteFill>
+    <AbsoluteFill style={motionStyle}>
       {isSSR ? (
         <div style={textCss}>{renderedText}</div>
       ) : (
@@ -313,7 +348,61 @@ const EffectClipRenderer: React.FC<{
     : componentType;
   const PackComponent = packRegistry.get(packKey ?? undefined) || packRegistry.get(componentType ?? undefined);
   if (PackComponent) {
-    return <PackComponent clip={clip} frame={frame} durationFrames={durationFrames} progress={progress} isSSR={isSSR} />;
+    // GLOBAL OVERFLOW GUARD: wrap ALL pack components in a clipping container
+    return (
+      <AbsoluteFill style={{ overflow: 'hidden' }}>
+        <PackComponent clip={clip} frame={frame} durationFrames={durationFrames} progress={progress} isSSR={isSSR} />
+      </AbsoluteFill>
+    );
+  }
+
+  // ── INLINE COMPOSITION: Agent draws directly with CSS layers + GSAP easing ──
+  // When effect_params.layers exists, render each layer as a positioned div
+  // This allows the Agent to "paint" unique compositions with professional easing
+  const layers = params.layers as Array<Record<string, any>> | undefined;
+  if (layers && Array.isArray(layers)) {
+    const enterProg = clamp01(frame / Math.max(1, Math.round(durationFrames * 0.12)));
+    const exitProg = clamp01((durationFrames - frame) / Math.max(1, Math.round(durationFrames * 0.08)));
+    const envelope = enterProg * exitProg;
+    return (
+      <AbsoluteFill style={{ overflow: 'hidden', opacity: envelope }}>
+        {layers.map((layer: Record<string, any>, idx: number) => {
+          const layerType = layer.type || 'div';
+          const style: React.CSSProperties = { position: 'absolute', ...(layer.style || {}) };
+          if (layer.animate) {
+            const a = layer.animate;
+            const easingName = (a.easing as string) || 'power3.out';
+            const ep = gsapEase(progress, easingName);
+            if (a.opacity) style.opacity = a.opacity[0] + (a.opacity[1] - a.opacity[0]) * ep;
+            if (a.x) style.left = `${a.x[0] + (a.x[1] - a.x[0]) * ep}%`;
+            if (a.y) style.top = `${a.y[0] + (a.y[1] - a.y[0]) * ep}%`;
+            if (a.scale) style.transform = `${style.transform || ''} scale(${a.scale[0] + (a.scale[1] - a.scale[0]) * ep})`;
+            if (a.rotate) style.transform = `${style.transform || ''} rotate(${a.rotate[0] + (a.rotate[1] - a.rotate[0]) * ep}deg)`;
+            if (a.blur) {
+              const bv = a.blur[0] + (a.blur[1] - a.blur[0]) * ep;
+              style.filter = `blur(${bv}px)`;
+            }
+            if (a.clipPath) {
+              // Interpolate between two inset values: [startPct, endPct]
+              const cv = a.clipPath[0] + (a.clipPath[1] - a.clipPath[0]) * ep;
+              style.clipPath = `inset(0 ${cv}% 0 0)`;
+            }
+          }
+          // Stagger support: delay each layer's animation start
+          if (layer.stagger && idx > 0) {
+            const staggerDelay = (layer.stagger as number) * idx;
+            const staggeredProgress = Math.max(0, progress - staggerDelay);
+            if (staggeredProgress <= 0) {
+              style.opacity = 0;
+            }
+          }
+          if (layerType === 'text') {
+            return <div key={idx} style={style}>{layer.content || ''}</div>;
+          }
+          return <div key={idx} style={style} />;
+        })}
+      </AbsoluteFill>
+    );
   }
 
   // ── Fallback: sticker_text ────────────────────────────────────
@@ -632,7 +721,7 @@ export const TimelineComposition: React.FC<TimelineCompositionProps> = ({ timeli
                     from={startFrame}
                     durationInFrames={durationFrames}
                   >
-                    <SrtSubtitleClip clip={clip} timeline={timeline} fps={fps} />
+                    <SrtSubtitleClip clip={clip} timeline={timeline} fps={fps} durationFrames={durationFrames} />
                   </Sequence>
                 );
               }
@@ -646,7 +735,7 @@ export const TimelineComposition: React.FC<TimelineCompositionProps> = ({ timeli
                   from={startFrame}
                   durationInFrames={durationFrames}
                 >
-                  <InlineSubtitleClip clip={clip} isSSR={!!(timeline as any)._ssr} />
+                  <InlineSubtitleClip clip={clip} isSSR={!!(timeline as any)._ssr} durationFrames={durationFrames} />
                 </Sequence>
               );
             }),
