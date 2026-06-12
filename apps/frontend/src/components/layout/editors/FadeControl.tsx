@@ -53,7 +53,7 @@ function FadeRow({
                 : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
             }`}
           >
-            {v === 0 ? 'Off' : `${v}s`}
+            {v === 0 ? '关' : `${v}s`}
           </button>
         ))}
       </div>
@@ -86,10 +86,10 @@ export default function FadeControl({ clip, onFadeChange }: FadeControlProps) {
 
   return (
     <fieldset>
-      <legend className="text-xs font-medium text-zinc-300 mb-2">Fade</legend>
+      <legend className="text-xs font-medium text-zinc-300 mb-2">淡入淡出</legend>
       <div className="space-y-3">
-        <FadeRow label="Fade In" value={localIn} propValue={fadeIn} maxFade={maxFade} onChange={(v) => handleChange('in', v)} />
-        <FadeRow label="Fade Out" value={localOut} propValue={fadeOut} maxFade={maxFade} onChange={(v) => handleChange('out', v)} />
+        <FadeRow label="淡入" value={localIn} propValue={fadeIn} maxFade={maxFade} onChange={(v) => handleChange('in', v)} />
+        <FadeRow label="淡出" value={localOut} propValue={fadeOut} maxFade={maxFade} onChange={(v) => handleChange('out', v)} />
       </div>
     </fieldset>
   );

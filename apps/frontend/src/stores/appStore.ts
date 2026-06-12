@@ -35,6 +35,18 @@ export interface AgentProgress {
   reasonings: string[];
 }
 
+/** 外部 Agent（工具网关）的一次工具调用记录 */
+export interface ExternalToolActivity {
+  id: number;
+  toolName: string;
+  phase: 'started' | 'succeeded' | 'failed';
+  args?: Record<string, string>;
+  summary?: string;
+  timestamp: string;
+}
+
+const MAX_EXTERNAL_ACTIVITIES = 100;
+
 const MAX_UNDO = 50;
 
 interface AppStore {
@@ -88,6 +100,16 @@ interface AppStore {
   onAgentAborted: () => void;
   archiveAgentProgress: () => { toolCalls?: ToolCallProgress[]; reasonings?: string[] };
 
+  // External agent (tool gateway) activity feed
+  externalActivities: ExternalToolActivity[];
+  onToolActivity: (
+    phase: 'started' | 'succeeded' | 'failed',
+    toolName: string,
+    args?: Record<string, string>,
+    summary?: string,
+  ) => void;
+  clearExternalActivities: () => void;
+
   // Subtitle style presets
   subtitlePresets: Record<string, SubtitleStyle>;
   loadSubtitlePresets: () => Promise<void>;
@@ -113,27 +135,25 @@ export const useAppStore = create<AppStore>((set, get) => ({
   }),
 
   setTimelineFromServer: (t, version) => {
-    const { timelineVersion, agentProgress } = get();
+    const { timeline, timelineVersion, undoStack } = get();
     // Ignore stale updates (echo-backs with version <= current)
     if (version <= timelineVersion) return;
 
-    if (agentProgress.isActive) {
-      // Agent is making changes: replace timeline, clear undo/redo
-      set({
-        timeline: t,
-        timelineVersion: version,
-        undoStack: [],
-        redoStack: [],
-        timelineDirty: false,
-      });
-    } else {
-      // Echo-back of our own save — update version, preserve undo/redo
-      set({
-        timeline: t,
-        timelineVersion: version,
-        timelineDirty: false,
-      });
+    // Echo-back of our own save (same content): only bump version
+    if (timeline && JSON.stringify(timeline) === JSON.stringify(t)) {
+      set({ timelineVersion: version, timelineDirty: false });
+      return;
     }
+
+    // Someone else changed the timeline (agent / gateway tool / undo API).
+    // Push the current state onto the undo stack so the user can Cmd+Z it.
+    set({
+      timeline: t,
+      timelineVersion: version,
+      undoStack: timeline ? [...undoStack, timeline].slice(-MAX_UNDO) : undoStack,
+      redoStack: [],
+      timelineDirty: false,
+    });
   },
 
   // Timeline editing with undo
@@ -262,6 +282,38 @@ export const useAppStore = create<AppStore>((set, get) => ({
     set({ agentProgress: { isActive: false, toolCalls: [], reasonings: [] } });
     return snapshot;
   },
+
+  // External agent (tool gateway) activity feed
+  externalActivities: [],
+
+  onToolActivity: (phase, toolName, args, summary) =>
+    set((s) => {
+      if (phase !== 'started') {
+        // Update the matching in-flight entry instead of appending a new one
+        const idx = [...s.externalActivities]
+          .reverse()
+          .findIndex((a) => a.toolName === toolName && a.phase === 'started');
+        if (idx !== -1) {
+          const realIdx = s.externalActivities.length - 1 - idx;
+          const updated = [...s.externalActivities];
+          updated[realIdx] = { ...updated[realIdx], phase, summary };
+          return { externalActivities: updated };
+        }
+      }
+      const next: ExternalToolActivity = {
+        id: Date.now() + Math.random(),
+        toolName,
+        phase,
+        args,
+        summary,
+        timestamp: new Date().toISOString(),
+      };
+      return {
+        externalActivities: [...s.externalActivities, next].slice(-MAX_EXTERNAL_ACTIVITIES),
+      };
+    }),
+
+  clearExternalActivities: () => set({ externalActivities: [] }),
 
   // Subtitle style presets
   subtitlePresets: {},

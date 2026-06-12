@@ -25,7 +25,7 @@ export default function App() {
 
     if (!projectId) {
       // No saved project — create a new one
-      createProject('Untitled')
+      createProject('未命名项目')
         .then((res) => {
           setProjectId(res.project_id);
           setTimeline(res.timeline, 0);

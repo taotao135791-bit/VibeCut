@@ -9,6 +9,7 @@ import logging
 from pathlib import Path
 
 from app.services.analysis_file import append_section
+from app.tools.audio_analysis import get_transcript_json_path
 from app.tools.registry import registry
 
 logger = logging.getLogger(__name__)
@@ -18,8 +19,9 @@ logger = logging.getLogger(__name__)
     name="transcribe_audio",
     description=(
         "Transcribe speech using Whisper ASR. Returns word-level timestamps and full transcript. "
-        "Includes LLM post-correction for mispronunciation errors. "
-        "Results auto-saved to <filename>_analysis.md (check for existing file first). "
+        "Includes LLM post-correction for mispronunciation errors (skipped when no LLM key is configured). "
+        "Results auto-saved to <filename>_analysis.md and word-level JSON to <filename>_transcript.json "
+        "(used by detect_filler_words; check for an existing file first to avoid re-transcribing). "
         "\n\nIMPORTANT: Returned timestamps are in SOURCE TIME (positions within the original media file), "
         "NOT timeline time. After any cut or rearrangement, use map_time to convert. "
         "\n\nWhen to use: getting speech content and timestamps for subtitle generation, "
@@ -56,6 +58,16 @@ async def transcribe_audio(args: dict, state) -> dict:
             await _correct_transcription(result)
         except Exception:
             logger.warning("LLM transcription correction failed, using original", exc_info=True)
+
+        # Persist word-level JSON cache (consumed by detect_filler_words and re-edits)
+        try:
+            transcript_path = get_transcript_json_path(file_path)
+            transcript_path.write_text(
+                json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8"
+            )
+            result["transcript_file"] = str(transcript_path)
+        except OSError:
+            logger.warning("Failed to write transcript JSON cache", exc_info=True)
 
         # Persist to _analysis.md
         md_path = append_section(file_path, "Transcription", _format_transcription_md(result))
@@ -141,6 +153,19 @@ async def _correct_transcription(result: dict) -> None:
     """
     segments = result.get("segments", [])
     if not segments:
+        return
+
+    from app.config import settings
+
+    # No LLM key configured (API-key-free / external-agent mode) — skip correction
+    # entirely instead of making a doomed network call.
+    has_key = (
+        settings.openai_api_key
+        if settings.llm_provider == "openai"
+        else settings.gemini_api_key
+    )
+    if not has_key:
+        logger.info("No LLM API key configured — skipping transcription correction")
         return
 
     from app.services.llm import get_provider

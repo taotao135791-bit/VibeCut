@@ -24,7 +24,7 @@ export default function VolumeControl({ clip, onVolumeChange }: VolumeControlPro
 
   return (
     <fieldset>
-      <legend className="text-xs font-medium text-zinc-300 mb-2">Volume</legend>
+      <legend className="text-xs font-medium text-zinc-300 mb-2">音量</legend>
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <input
@@ -55,7 +55,7 @@ export default function VolumeControl({ clip, onVolumeChange }: VolumeControlPro
                   : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
               }`}
             >
-              {v === 0 ? 'Mute' : `${v}x`}
+              {v === 0 ? '静音' : `${v}x`}
             </button>
           ))}
         </div>

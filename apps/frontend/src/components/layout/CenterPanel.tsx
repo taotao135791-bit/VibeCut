@@ -178,13 +178,13 @@ export default function CenterPanel() {
           />
         ) : (
           <div className="text-zinc-600 text-sm">
-            Select a media file to preview, or chat with the agent to create a timeline
+            选择素材文件进行预览，或让 Agent 创建时间线
           </div>
         )}
       </div>
 
       <div className="h-[250px] border-t border-zinc-800 bg-zinc-900 flex items-center justify-center">
-        <div className="text-zinc-600 text-sm">No timeline loaded</div>
+        <div className="text-zinc-600 text-sm">尚未加载时间线</div>
       </div>
     </div>
   );

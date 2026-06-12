@@ -33,7 +33,7 @@ export default function MediaPanel() {
       setDirInput(data.dir);
       setMediaFiles(data.files);
     } catch (e: any) {
-      setError(e.message || 'Failed to load directory');
+      setError(e.message || '加载目录失败');
     } finally {
       setLoading(false);
     }
@@ -63,7 +63,7 @@ export default function MediaPanel() {
   return (
     <div className="h-full flex flex-col bg-zinc-900 border-r border-zinc-800">
       <div className="px-3 py-2 border-b border-zinc-800 text-sm font-medium text-zinc-400">
-        Media
+        素材
       </div>
 
       {/* Directory input */}
@@ -73,7 +73,7 @@ export default function MediaPanel() {
             type="text"
             value={dirInput}
             onChange={(e) => setDirInput(e.target.value)}
-            placeholder="/path/to/media"
+            placeholder="/素材文件夹路径"
             className="flex-1 bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-blue-500 min-w-0"
           />
           <button
@@ -81,7 +81,7 @@ export default function MediaPanel() {
             disabled={loading}
             className="px-2 py-1 bg-zinc-700 hover:bg-zinc-600 rounded text-xs transition-colors disabled:opacity-50"
           >
-            {loading ? '...' : 'Go'}
+            {loading ? '...' : '打开'}
           </button>
         </div>
       </form>
@@ -96,7 +96,7 @@ export default function MediaPanel() {
       {mediaDir && (
         <div className="px-2 py-1 border-b border-zinc-800 flex items-center gap-1">
           <button onClick={goUp} className="text-xs text-zinc-400 hover:text-zinc-200 px-1">
-            ↑ Up
+            ↑ 上级
           </button>
           <span className="text-xs text-zinc-600 truncate flex-1" title={mediaDir}>
             {mediaDir}
@@ -107,11 +107,11 @@ export default function MediaPanel() {
       {/* File list */}
       <div className="flex-1 overflow-y-auto">
         {mediaFiles.length === 0 && mediaDir && !loading && (
-          <div className="p-3 text-xs text-zinc-600 text-center">No media files found</div>
+          <div className="p-3 text-xs text-zinc-600 text-center">该目录下没有媒体文件</div>
         )}
         {!mediaDir && !loading && (
           <div className="p-3 text-xs text-zinc-600 text-center">
-            Enter a directory path above to browse media files
+            在上方输入素材文件夹路径，浏览媒体文件
           </div>
         )}
         {mediaFiles.map((file) => (

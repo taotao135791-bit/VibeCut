@@ -8,10 +8,16 @@ interface TrackHeaderProps {
   onDragStart: (trackId: string, pointerY: number) => void;
 }
 
+const TRACK_TYPE_LABELS: Record<string, string> = {
+  video: '视频',
+  audio: '音频',
+  subtitle: '字幕',
+  effect: '特效',
+};
+
 export default function TrackHeader({ track, onDelete, onDragStart }: TrackHeaderProps) {
   const color = TRACK_COLORS[track.type] || gray500;
-  const displayName =
-    track.name || track.type.charAt(0).toUpperCase() + track.type.slice(1);
+  const displayName = track.name || TRACK_TYPE_LABELS[track.type] || track.type;
 
   return (
     <div className="w-full h-full flex items-center gap-1 px-1 select-none">
@@ -50,7 +56,7 @@ export default function TrackHeader({ track, onDelete, onDragStart }: TrackHeade
       <button
         className="flex-shrink-0 w-5 h-5 flex items-center justify-center rounded
                    text-zinc-500 hover:text-red-400 hover:bg-zinc-700/60 transition-colors"
-        title="Delete track"
+        title="删除轨道"
         onClick={(e) => {
           e.stopPropagation();
           onDelete(track.id);

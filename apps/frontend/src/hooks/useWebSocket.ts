@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useAppStore } from '../stores/appStore';
 
 export function useWebSocket(projectId: string | null) {
-  const { setTimelineFromServer, addMessage, setWsConnected, setWsSend, onToolStart, onToolEnd, onAgentReasoning, onAgentDone, onAgentAborted } = useAppStore();
+  const { setTimelineFromServer, addMessage, setWsConnected, setWsSend, onToolStart, onToolEnd, onAgentReasoning, onAgentDone, onAgentAborted, onToolActivity } = useAppStore();
   const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
@@ -50,6 +50,11 @@ export function useWebSocket(projectId: string | null) {
             onAgentReasoning(reasoning);
             break;
           }
+          case 'tool_activity': {
+            const { phase, tool_name, args, summary } = msg.data;
+            onToolActivity(phase, tool_name, args, summary);
+            break;
+          }
           case 'agent_progress': {
             const { event: evt, tool_name, tool_args, result_summary, is_error, iteration } = msg.data;
             switch (evt) {
@@ -83,7 +88,7 @@ export function useWebSocket(projectId: string | null) {
       setWsSend(null);
       wsRef.current = null;
     };
-  }, [projectId, setTimelineFromServer, addMessage, setWsConnected, setWsSend, onToolStart, onToolEnd, onAgentReasoning, onAgentDone, onAgentAborted]);
+  }, [projectId, setTimelineFromServer, addMessage, setWsConnected, setWsSend, onToolStart, onToolEnd, onAgentReasoning, onAgentDone, onAgentAborted, onToolActivity]);
 
   return wsRef;
 }

@@ -52,7 +52,7 @@ function StyleForm({
     <div className="space-y-2.5 max-h-[50vh] overflow-y-auto pr-1 custom-scroll">
       {/* Position */}
       <fieldset className="space-y-1">
-        <legend className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider">Position</legend>
+        <legend className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider">位置</legend>
         <div className="grid grid-cols-2 gap-1.5">
           <label className="text-[10px] text-zinc-500">
             X
@@ -71,9 +71,9 @@ function StyleForm({
 
       {/* Typography */}
       <fieldset className="space-y-1">
-        <legend className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider">Typography</legend>
+        <legend className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider">字体</legend>
         <label className="text-[10px] text-zinc-500">
-          Font Family
+          字体族
           <select value={style.font_family}
             onChange={(e) => { onChange('font_family', e.target.value); ensureFontLoaded(e.target.value); }}
             className="mt-0.5 w-full bg-zinc-800 border border-zinc-700 rounded px-1.5 py-0.5 text-xs text-zinc-100 focus:outline-none focus:border-blue-500">
@@ -91,39 +91,39 @@ function StyleForm({
           </select>
         </label>
         <label className="text-[10px] text-zinc-500">
-          Font Size
+          字号
           <input type="number" value={style.font_size} min={8} max={200}
             onChange={(e) => { const v = parseInt(e.target.value, 10); if (!isNaN(v)) onChange('font_size', v); }}
             className="mt-0.5 w-full bg-zinc-800 border border-zinc-700 rounded px-1.5 py-0.5 text-xs text-zinc-100 focus:outline-none focus:border-blue-500" />
         </label>
         <label className="text-[10px] text-zinc-500">
-          Color
+          颜色
           <div className="mt-0.5">
             <ColorSwatch value={style.color} onChange={(c) => onChange('color', c)} />
           </div>
         </label>
         <label className="text-[10px] text-zinc-500">
-          Align
+          对齐
           <select value={style.text_align}
             onChange={(e) => onChange('text_align', e.target.value)}
             className="mt-0.5 w-full bg-zinc-800 border border-zinc-700 rounded px-1.5 py-0.5 text-xs text-zinc-100 focus:outline-none focus:border-blue-500">
-            <option value="left">Left</option>
-            <option value="center">Center</option>
-            <option value="right">Right</option>
+            <option value="left">左对齐</option>
+            <option value="center">居中</option>
+            <option value="right">右对齐</option>
           </select>
         </label>
         <div className="flex gap-3">
           <label className="flex items-center gap-1 text-[10px] text-zinc-400 cursor-pointer">
             <input type="checkbox" checked={style.bold} onChange={(e) => onChange('bold', e.target.checked)} className="rounded border-zinc-600" />
-            Bold
+            加粗
           </label>
           <label className="flex items-center gap-1 text-[10px] text-zinc-400 cursor-pointer">
             <input type="checkbox" checked={style.italic} onChange={(e) => onChange('italic', e.target.checked)} className="rounded border-zinc-600" />
-            Italic
+            斜体
           </label>
         </div>
         <label className="text-[10px] text-zinc-500">
-          Letter Spacing (px)
+          字间距（px）
           <input type="number" value={style.letter_spacing} step={0.5}
             onChange={(e) => onChange('letter_spacing', parseFloat(e.target.value) || 0)}
             className="mt-0.5 w-full bg-zinc-800 border border-zinc-700 rounded px-1.5 py-0.5 text-xs text-zinc-100 focus:outline-none focus:border-blue-500" />
@@ -132,16 +132,16 @@ function StyleForm({
 
       {/* Appearance */}
       <fieldset className="space-y-1">
-        <legend className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider">Appearance</legend>
+        <legend className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider">外观</legend>
         <label className="text-[10px] text-zinc-500">
-          Background
+          背景
           <input type="text" value={style.background}
             onChange={(e) => onChange('background', e.target.value)}
             placeholder="rgba(0,0,0,0.6)"
             className="mt-0.5 w-full bg-zinc-800 border border-zinc-700 rounded px-1.5 py-0.5 text-xs text-zinc-100 focus:outline-none focus:border-blue-500" />
         </label>
         <label className="text-[10px] text-zinc-500">
-          Padding
+          内边距
           <input type="text" value={style.padding}
             onChange={(e) => onChange('padding', e.target.value)}
             placeholder="4px 16px"
@@ -149,13 +149,13 @@ function StyleForm({
         </label>
         <div className="grid grid-cols-2 gap-1.5">
           <label className="text-[10px] text-zinc-500">
-            Border Radius
+            圆角
             <input type="number" value={style.border_radius} min={0}
               onChange={(e) => onChange('border_radius', parseFloat(e.target.value) || 0)}
               className="mt-0.5 w-full bg-zinc-800 border border-zinc-700 rounded px-1.5 py-0.5 text-xs text-zinc-100 focus:outline-none focus:border-blue-500" />
           </label>
           <label className="text-[10px] text-zinc-500">
-            Opacity
+            不透明度
             <input type="number" value={style.opacity} min={0} max={1} step={0.05}
               onChange={(e) => onChange('opacity', parseFloat(e.target.value) || 1)}
               className="mt-0.5 w-full bg-zinc-800 border border-zinc-700 rounded px-1.5 py-0.5 text-xs text-zinc-100 focus:outline-none focus:border-blue-500" />
@@ -165,23 +165,23 @@ function StyleForm({
 
       {/* Outline & Shadow */}
       <fieldset className="space-y-1">
-        <legend className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider">Outline & Shadow</legend>
+        <legend className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider">描边与阴影</legend>
         <div className="grid grid-cols-2 gap-1.5">
           <label className="text-[10px] text-zinc-500">
-            Outline Color
+            描边颜色
             <div className="mt-0.5">
               <ColorSwatch value={style.outline_color} onChange={(c) => onChange('outline_color', c)} allowTransparent />
             </div>
           </label>
           <label className="text-[10px] text-zinc-500">
-            Outline Width
+            描边宽度
             <input type="number" value={style.outline_width} min={0} step={0.5}
               onChange={(e) => onChange('outline_width', parseFloat(e.target.value) || 0)}
               className="mt-0.5 w-full bg-zinc-800 border border-zinc-700 rounded px-1.5 py-0.5 text-xs text-zinc-100 focus:outline-none focus:border-blue-500" />
           </label>
         </div>
         <label className="text-[10px] text-zinc-500">
-          Shadow (CSS text-shadow)
+          阴影（CSS text-shadow）
           <input type="text" value={style.shadow === 'none' ? '' : style.shadow}
             onChange={(e) => onChange('shadow', e.target.value || 'none')}
             placeholder="2px 2px 4px rgba(0,0,0,0.5)"
@@ -344,7 +344,7 @@ export default function PresetPopover({ currentPreset, onSelectPreset }: PresetP
                       <button
                         onClick={(e) => { e.stopPropagation(); handleEditClick(name); }}
                         className="p-0.5 rounded text-zinc-400 hover:text-blue-400 hover:bg-zinc-700"
-                        title="Edit preset"
+                        title="编辑预设"
                       >
                         <IconPencil />
                       </button>
@@ -352,7 +352,7 @@ export default function PresetPopover({ currentPreset, onSelectPreset }: PresetP
                         <button
                           onClick={(e) => { e.stopPropagation(); handleDeleteClick(name); }}
                           className="p-0.5 rounded text-zinc-400 hover:text-red-400 hover:bg-zinc-700"
-                          title="Delete preset"
+                          title="删除预设"
                         >
                           <IconTrash />
                         </button>
@@ -369,7 +369,7 @@ export default function PresetPopover({ currentPreset, onSelectPreset }: PresetP
                   className="w-full flex items-center gap-1.5 px-2.5 py-1.5 text-xs text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 transition-colors"
                 >
                   <IconPlus />
-                  New Style
+                  新建样式
                 </button>
               </div>
             </div>
@@ -382,7 +382,7 @@ export default function PresetPopover({ currentPreset, onSelectPreset }: PresetP
                 <button
                   onClick={handleSaveAndBack}
                   className="p-0.5 rounded text-zinc-400 hover:text-zinc-100 hover:bg-zinc-700 transition-colors"
-                  title="Save & back"
+                  title="保存并返回"
                 >
                   <IconBack />
                 </button>
@@ -393,7 +393,7 @@ export default function PresetPopover({ currentPreset, onSelectPreset }: PresetP
                     type="text"
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
-                    placeholder="Preset name..."
+                    placeholder="预设名称..."
                     autoFocus
                     className="flex-1 bg-zinc-800 border border-zinc-700 rounded px-1.5 py-0.5 text-xs text-zinc-100
                                focus:outline-none focus:border-blue-500"
@@ -407,8 +407,8 @@ export default function PresetPopover({ currentPreset, onSelectPreset }: PresetP
               {/* Footer hint */}
               <div className="mt-2 pt-2 border-t border-zinc-700 text-[10px] text-zinc-500">
                 {mode === 'edit'
-                  ? 'Changes apply to all clips using this preset.'
-                  : 'New preset will be applied to the current clip.'}
+                  ? '修改将应用到所有使用此预设的片段。'
+                  : '新预设将应用到当前片段。'}
               </div>
             </div>
           )}

@@ -25,6 +25,9 @@ class AgentState:
     version: int = 0
     agent_active: bool = False
     abort_requested: bool = False
+    # True when the in-memory timeline has tool-gateway edits that were made
+    # with persist=False and not yet saved to disk. Guards sync_from_disk.
+    gateway_dirty: bool = False
 
     def bump_version(self) -> int:
         """Increment version counter and return the new value."""

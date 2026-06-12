@@ -27,8 +27,8 @@ venv/
 .DS_Store
 Thumbs.db
 
-# Tests
-tests/
+# Tests (root-level only; backend tests live in apps/backend/tests/)
+/tests/
 
 # Projects data
 apps/backend/projects/

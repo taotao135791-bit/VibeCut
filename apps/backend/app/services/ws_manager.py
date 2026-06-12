@@ -81,6 +81,36 @@ class WebSocketManager:
         }
         await self._broadcast(project_id, message)
 
+    async def broadcast_tool_activity(
+        self,
+        project_id: str,
+        phase: str,
+        tool_name: str,
+        args: dict | None = None,
+        summary: str | None = None,
+        version: int | None = None,
+    ):
+        """Broadcast external (tool-gateway) tool activity so the UI can show
+        what an outside agent is doing. phase: started | succeeded | failed."""
+        data: dict = {"phase": phase, "tool_name": tool_name}
+        if args:
+            safe_args = {}
+            for k, v in args.items():
+                s = str(v)
+                safe_args[k] = (s[:200] + "...") if len(s) > 200 else s
+            data["args"] = safe_args
+        if summary is not None:
+            data["summary"] = summary[:300]
+        if version is not None:
+            data["version"] = version
+
+        message = {
+            "type": "tool_activity",
+            "data": data,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+        await self._broadcast(project_id, message)
+
     async def broadcast_export_progress(
         self,
         project_id: str,

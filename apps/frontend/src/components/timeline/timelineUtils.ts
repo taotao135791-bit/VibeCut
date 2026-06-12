@@ -167,6 +167,19 @@ export function generateTrackId(): string {
   return `track_${hex}`;
 }
 
+const TRACK_TYPE_LABELS: Record<string, string> = {
+  video: '视频',
+  audio: '音频',
+  subtitle: '字幕',
+  effect: '特效',
+};
+
+/** 生成中文轨道名称，如 “视频 2” */
+export function generateTrackName(timeline: TimelineProject, type: string): string {
+  const count = timeline.tracks.filter((t) => t.type === type).length + 1;
+  return `${TRACK_TYPE_LABELS[type] ?? type} ${count}`;
+}
+
 /** Add a new track to the timeline */
 export function addTrackToTimeline(
   timeline: TimelineProject,

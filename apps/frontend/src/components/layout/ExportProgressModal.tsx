@@ -22,10 +22,10 @@ export default function ExportProgressModal({
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm font-medium text-zinc-200">
           {status === 'completed'
-            ? 'Export Complete'
+            ? '导出完成'
             : status === 'error'
-              ? 'Export Failed'
-              : 'Exporting Video...'}
+              ? '导出失败'
+              : '正在导出视频...'}
         </span>
         <button
           onClick={onClose}
@@ -57,7 +57,7 @@ export default function ExportProgressModal({
       <div className="mt-2 flex justify-between items-center">
         {status === 'error' ? (
           <span className="text-xs text-red-400 truncate" title={error ?? ''}>
-            {error || 'Unknown error'}
+            {error || '未知错误'}
           </span>
         ) : (
           <span className="text-xs text-zinc-400">{pct}%</span>
@@ -69,7 +69,7 @@ export default function ExportProgressModal({
             className="text-xs font-medium text-blue-400 hover:text-blue-300 transition-colors"
             download
           >
-            Download
+            下载
           </a>
         )}
       </div>

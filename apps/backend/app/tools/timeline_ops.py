@@ -138,6 +138,15 @@ async def create_timeline(args: dict, state) -> dict:
                 clips_raw = t.pop("clips", [])
                 clips = []
                 for c in clips_raw:
+                    # Honor the documented contract: timeline_end_sec is
+                    # auto-computed for media clips when omitted.
+                    if "timeline_end_sec" not in c:
+                        src_out = c.get("source_out_sec")
+                        if src_out is not None:
+                            src_in = float(c.get("source_in_sec") or 0)
+                            speed = float(c.get("speed") or 1.0)
+                            start = float(c.get("timeline_start_sec") or 0)
+                            c["timeline_end_sec"] = start + (float(src_out) - src_in) / speed
                     clip = Clip(**c)
                     _recompute_end(clip)
                     clips.append(clip)

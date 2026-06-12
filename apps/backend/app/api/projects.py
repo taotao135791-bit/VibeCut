@@ -46,9 +46,9 @@ async def create_project(
         project={"name": name, "width": width, "height": height, "fps": fps},
         media_pool=[],
         tracks=[
-            {"id": "track-video-1", "name": "Video 1", "type": "video", "clips": []},
-            {"id": "track-effect-1", "name": "Effects 1", "type": "effect", "clips": []},
-            {"id": "track-audio-1", "name": "Audio 1", "type": "audio", "clips": []},
+            {"id": "track-video-1", "name": "视频 1", "type": "video", "clips": []},
+            {"id": "track-effect-1", "name": "特效 1", "type": "effect", "clips": []},
+            {"id": "track-audio-1", "name": "音频 1", "type": "audio", "clips": []},
         ],
     )
     timeline_manager.create_project(project_id, tl)
@@ -63,8 +63,44 @@ async def rename_project(project_id: str, name: str):
     state = timeline_manager.get_state(project_id)
     if state.current_timeline:
         state.current_timeline.project.name = name
-        timeline_manager._save_to_disk(state)
+        await timeline_manager.save_and_broadcast(project_id)
     return {"project_id": project_id, "name": name}
+
+
+@router.get("/{project_id}/history")
+async def get_history(project_id: str):
+    """How many undo/redo steps are available for a project."""
+    if not timeline_manager.project_exists(project_id):
+        raise HTTPException(status_code=404, detail=f"Project not found: {project_id}")
+    return {"project_id": project_id, **timeline_manager.history_info(project_id)}
+
+
+@router.post("/{project_id}/undo")
+async def undo_project(project_id: str):
+    """Undo the last saved timeline change (restores previous version)."""
+    if not timeline_manager.project_exists(project_id):
+        raise HTTPException(status_code=404, detail=f"Project not found: {project_id}")
+    try:
+        version = await timeline_manager.undo(project_id)
+    except ValueError:
+        raise HTTPException(status_code=409, detail="Agent is currently modifying the timeline.")
+    if version is None:
+        raise HTTPException(status_code=400, detail="Nothing to undo")
+    return {"project_id": project_id, "version": version, **timeline_manager.history_info(project_id)}
+
+
+@router.post("/{project_id}/redo")
+async def redo_project(project_id: str):
+    """Redo the most recently undone timeline change."""
+    if not timeline_manager.project_exists(project_id):
+        raise HTTPException(status_code=404, detail=f"Project not found: {project_id}")
+    try:
+        version = await timeline_manager.redo(project_id)
+    except ValueError:
+        raise HTTPException(status_code=409, detail="Agent is currently modifying the timeline.")
+    if version is None:
+        raise HTTPException(status_code=400, detail="Nothing to redo")
+    return {"project_id": project_id, "version": version, **timeline_manager.history_info(project_id)}
 
 
 @router.get("/{project_id}")

@@ -164,7 +164,7 @@ export default function Toolbar() {
 
   const handleNewProject = useCallback(async () => {
     try {
-      const res = await createProject('Untitled');
+      const res = await createProject('未命名项目');
       setProjectId(res.project_id);
       setTimeline(res.timeline, 0);
       loadSubtitlePresets();
@@ -183,7 +183,7 @@ export default function Toolbar() {
 
   const handleCommitRename = useCallback(async () => {
     if (!editingId) return;
-    const trimmed = editingName.trim() || 'Untitled';
+    const trimmed = editingName.trim() || '未命名项目';
     try {
       await renameProject(editingId, trimmed);
       setProjectList((prev) => prev.map((p) => p.project_id === editingId ? { ...p, name: trimmed } : p));
@@ -210,7 +210,7 @@ export default function Toolbar() {
             className="text-sm font-medium text-zinc-400 truncate hover:text-zinc-200
                        flex items-center gap-1 transition-colors"
           >
-            {timeline?.project.name ?? 'Untitled'}
+            {timeline?.project.name ?? '未命名项目'}
             <svg className="h-3 w-3 shrink-0" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clipRule="evenodd" />
             </svg>
@@ -218,7 +218,7 @@ export default function Toolbar() {
           {projectListOpen && (
             <div className="absolute left-0 mt-1 w-56 max-h-64 overflow-y-auto rounded bg-zinc-800 border border-zinc-700 shadow-lg z-50 py-1">
               {projectList.length === 0 ? (
-                <div className="px-3 py-1.5 text-xs text-zinc-500">No projects</div>
+                <div className="px-3 py-1.5 text-xs text-zinc-500">暂无项目</div>
               ) : (
                 projectList.map((p) => (
                   <div
@@ -253,7 +253,7 @@ export default function Toolbar() {
                         <button
                           onClick={(e) => handleStartRename(e, p.project_id, p.name)}
                           className="ml-1.5 p-0.5 rounded text-zinc-500 hover:text-zinc-200 hover:bg-zinc-600 transition-colors shrink-0"
-                          title="Rename"
+                          title="重命名"
                         >
                           <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M17 3a2.85 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5Z" />
@@ -279,7 +279,7 @@ export default function Toolbar() {
               <line x1="12" y1="5" x2="12" y2="19" />
               <line x1="5" y1="12" x2="19" y2="12" />
             </svg>
-            New
+            新建
           </button>
           {gpuStatus && !gpuStatus.gpu_available && (
             <div
@@ -289,7 +289,7 @@ export default function Toolbar() {
               <svg className="h-3.5 w-3.5 shrink-0" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.168 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
               </svg>
-              <span className="hidden sm:inline truncate max-w-[120px]">CPU render</span>
+              <span className="hidden sm:inline truncate max-w-[120px]">CPU 渲染</span>
             </div>
           )}
           <div className="relative" ref={dropdownRef}>
@@ -308,7 +308,7 @@ export default function Toolbar() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
-                  Exporting...
+                  导出中...
                 </>
               ) : (
                 <>
@@ -317,7 +317,7 @@ export default function Toolbar() {
                     <polyline points="7 10 12 15 17 10" />
                     <line x1="12" y1="15" x2="12" y2="3" />
                   </svg>
-                  Export
+                  导出
                 </>
               )}
             </button>
@@ -343,45 +343,45 @@ export default function Toolbar() {
                 onClick={() => handleExportMp4('mp4')}
                 className="w-full text-left px-3 py-1.5 text-xs text-zinc-200 hover:bg-zinc-700 transition-colors"
               >
-                Export MP4 (Remotion)
+                导出 MP4（Remotion）
               </button>
-              <div className="px-3 pt-1.5 pb-0.5 text-xs text-zinc-500 font-medium">MP4 (FFmpeg/h264)</div>
+              <div className="px-3 pt-1.5 pb-0.5 text-xs text-zinc-500 font-medium">MP4（FFmpeg/h264）</div>
               <button
                 onClick={() => handleExportH264('ass')}
                 className="w-full text-left px-4 py-1.5 text-xs text-zinc-200 hover:bg-zinc-700 transition-colors"
               >
-                Burn-in ASS (styled)
+                烧录 ASS 字幕（带样式）
               </button>
               <button
                 onClick={() => handleExportH264('srt')}
                 className="w-full text-left px-4 py-1.5 text-xs text-zinc-200 hover:bg-zinc-700 transition-colors"
               >
-                Burn-in SRT (plain)
+                烧录 SRT 字幕（纯文本）
               </button>
               <button
                 onClick={() => handleExportH264('none')}
                 className="w-full text-left px-4 py-1.5 text-xs text-zinc-200 hover:bg-zinc-700 transition-colors"
               >
-                No subtitle burn-in
+                不烧录字幕
               </button>
               <div className="my-1 border-t border-zinc-700" />
               <button
                 onClick={() => handleExportInterchange('otio')}
                 className="w-full text-left px-3 py-1.5 text-xs text-zinc-200 hover:bg-zinc-700 transition-colors"
               >
-                Export OTIO
+                导出 OTIO
               </button>
               <button
                 onClick={() => handleExportInterchange('fcpxml')}
                 className="w-full text-left px-3 py-1.5 text-xs text-zinc-200 hover:bg-zinc-700 transition-colors"
               >
-                Export FCPXML
+                导出 FCPXML
               </button>
               <button
                 onClick={handleExportAss}
                 className="w-full text-left px-3 py-1.5 text-xs text-zinc-200 hover:bg-zinc-700 transition-colors"
               >
-                Export ASS subtitle
+                导出 ASS 字幕
               </button>
             </div>
           )}
@@ -397,7 +397,7 @@ export default function Toolbar() {
           status={exportState.status}
           error={exportState.error}
           warning={gpuStatus && !gpuStatus.gpu_available
-            ? `Software rendering (slower): ${gpuStatus.reason}`
+            ? `软件渲染（较慢）：${gpuStatus.reason}`
             : null}
           onClose={handleCloseModal}
         />

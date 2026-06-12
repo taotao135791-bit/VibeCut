@@ -17,7 +17,7 @@ function ReasoningBlock({ content, index }: { content: string; index: number }) 
     >
       <div className="flex items-center gap-2 text-amber-400/80">
         <span>{expanded ? '\u25be' : '\u25b8'}</span>
-        <span className="font-medium">Thinking</span>
+        <span className="font-medium">思考过程</span>
         <span className="text-amber-400/50 text-[10px]">#{index + 1}</span>
       </div>
       {expanded && (

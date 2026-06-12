@@ -27,6 +27,7 @@ import {
   addClipToTimeline,
   addTrackToTimeline,
   generateTrackId,
+  generateTrackName,
   findGapAtTime,
   removeGapOnTrack,
   removeGapAllTracks,
@@ -301,8 +302,7 @@ export default function TimelineEditor({
         } else {
           // Create a new track of the correct type
           const newTrackId = generateTrackId();
-          const count = timeline.tracks.filter((t) => t.type === clipType).length + 1;
-          const name = `${clipType.charAt(0).toUpperCase() + clipType.slice(1)} ${count}`;
+          const name = generateTrackName(timeline, clipType);
           updatedTimeline = addTrackToTimeline(timeline, {
             id: newTrackId,
             name,
@@ -532,8 +532,7 @@ export default function TimelineEditor({
                   targetTrackId = targetTrack.id;
                 } else {
                   targetTrackId = generateTrackId();
-                  const count = updatedTimeline.tracks.filter((t) => t.type === newClip.type).length + 1;
-                  const name = `${newClip.type.charAt(0).toUpperCase() + newClip.type.slice(1)} ${count}`;
+                  const name = generateTrackName(updatedTimeline, newClip.type);
                   updatedTimeline = addTrackToTimeline(updatedTimeline, {
                     id: targetTrackId,
                     name,

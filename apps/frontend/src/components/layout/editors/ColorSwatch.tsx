@@ -142,7 +142,7 @@ export default function ColorSwatch({ value, onChange, allowTransparent }: Color
               value={isTransparent ? '#000000' : value}
               onChange={(e) => { onChange(e.target.value); }}
               className="w-5 h-5 bg-transparent border border-zinc-700 rounded cursor-pointer flex-shrink-0"
-              title="Custom color"
+              title="自定义颜色"
             />
           </div>
         </div>

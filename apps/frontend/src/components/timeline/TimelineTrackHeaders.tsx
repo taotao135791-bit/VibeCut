@@ -14,6 +14,7 @@ import {
   removeTrackFromTimeline,
   reorderTracksInTimeline,
   generateTrackId,
+  generateTrackName,
   clamp,
 } from './timelineUtils';
 
@@ -108,8 +109,7 @@ export default memo(function TimelineTrackHeaders({
   const handleAddTrack = useCallback(
     (type: 'video' | 'audio' | 'subtitle' | 'effect') => {
       const id = generateTrackId();
-      const count = timeline.tracks.filter((t) => t.type === type).length + 1;
-      const name = `${type.charAt(0).toUpperCase() + type.slice(1)} ${count}`;
+      const name = generateTrackName(timeline, type);
       onTimelineChange(
         addTrackToTimeline(timeline, {
           id,

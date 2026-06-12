@@ -71,7 +71,7 @@ function getTimelineWithAvailableEffectTrack(
 
   const track: Track = {
     id: generateTrackId(),
-    name: `Effects ${effectTracks.length + 1}`,
+    name: `特效 ${effectTracks.length + 1}`,
     type: 'effect',
     muted: false,
     locked: false,
@@ -137,7 +137,7 @@ export default function TimelineToolbar({
         type: 'subtitle' as const,
         timeline_start_sec: currentTime,
         timeline_end_sec: currentTime + 1,
-        subtitle_text: 'Subtitle',
+        subtitle_text: '字幕文本',
         speed: 1,
         source_in_sec: 0,
       };
@@ -232,7 +232,7 @@ export default function TimelineToolbar({
       <button
         onClick={handleSplit}
         disabled={!canSplit}
-        title="Split clip at playhead (S)"
+        title="在播放头处分割片段（S）"
         className="flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium transition-colors
           disabled:opacity-40 disabled:cursor-not-allowed
           enabled:hover:bg-zinc-700 enabled:text-zinc-200 text-zinc-400"
@@ -254,7 +254,7 @@ export default function TimelineToolbar({
           <line x1="14.47" y1="14.48" x2="20" y2="20" />
           <line x1="8.12" y1="8.12" x2="12" y2="12" />
         </svg>
-        Split
+        分割
       </button>
 
       {/* Add Subtitle */}
@@ -262,7 +262,7 @@ export default function TimelineToolbar({
         <button
           onClick={handleAddSubtitle}
           disabled={subtitleTracks.length === 0}
-          title="Add subtitle clip at playhead"
+          title="在播放头处添加字幕"
           className="flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium transition-colors
             disabled:opacity-40 disabled:cursor-not-allowed
             enabled:hover:bg-zinc-700 enabled:text-zinc-200 text-zinc-400"
@@ -282,7 +282,7 @@ export default function TimelineToolbar({
             <line x1="9.5" y1="20" x2="14.5" y2="20" />
             <line x1="12" y1="4" x2="12" y2="20" />
           </svg>
-          Subtitle
+          字幕
         </button>
 
         {/* Track selection dropdown */}
@@ -307,7 +307,7 @@ export default function TimelineToolbar({
       {/* Add Effects */}
       <button
         onClick={() => addEffect('speed_lines', 'fullscreen')}
-        title="Add full-screen remake effect at playhead"
+        title="在播放头处添加全屏特效"
         className="flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium transition-colors
           hover:bg-zinc-700 text-zinc-300"
       >
@@ -326,12 +326,12 @@ export default function TimelineToolbar({
           <path d="M6 17h12" />
           <path d="M18 7l3 5-3 5" />
         </svg>
-        Full FX
+        全屏特效
       </button>
 
       <button
         onClick={() => addEffect('callout', 'component')}
-        title="Add editable component effect at playhead"
+        title="在播放头处添加可编辑组件特效"
         className="flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium transition-colors
           hover:bg-zinc-700 text-zinc-300"
       >
@@ -349,14 +349,14 @@ export default function TimelineToolbar({
           <path d="M8 9h8" />
           <path d="M8 13h5" />
         </svg>
-        Callout
+        标注
       </button>
 
       {/* Merge */}
       <button
         onClick={handleMerge}
         disabled={!canMerge}
-        title="Merge two adjacent clips"
+        title="合并两个相邻片段"
         className="flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium transition-colors
           disabled:opacity-40 disabled:cursor-not-allowed
           enabled:hover:bg-zinc-700 enabled:text-zinc-200 text-zinc-400"
@@ -376,7 +376,7 @@ export default function TimelineToolbar({
           <line x1="12" y1="3" x2="12" y2="15" />
           <path d="M4 21h16" />
         </svg>
-        Merge
+        合并
       </button>
 
       {/* Remove Gap */}
@@ -384,7 +384,7 @@ export default function TimelineToolbar({
         <button
           onClick={handleRemoveGap}
           disabled={!canRemoveGap}
-          title="Remove gap at playhead (Shift+Delete)"
+          title="移除播放头处的空隙（Shift+Delete）"
           className="flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium transition-colors
             disabled:opacity-40 disabled:cursor-not-allowed
             enabled:hover:bg-zinc-700 enabled:text-zinc-200 text-zinc-400"
@@ -405,7 +405,7 @@ export default function TimelineToolbar({
             <line x1="2" y1="12" x2="10" y2="12" />
             <line x1="14" y1="12" x2="22" y2="12" />
           </svg>
-          Remove Gap
+          移除空隙
         </button>
 
         {gapMenuOpen && gaps.length > 1 && (
@@ -414,7 +414,7 @@ export default function TimelineToolbar({
               className="w-full text-left px-3 py-1 text-xs text-zinc-300 hover:bg-zinc-700 transition-colors border-b border-zinc-700"
               onClick={() => handleRemoveGapForTrack('ALL')}
             >
-              All Tracks
+              所有轨道
             </button>
             {gaps.map((g) => (
               <button

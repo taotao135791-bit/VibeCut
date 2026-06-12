@@ -123,10 +123,10 @@ export default function ClipPropertiesEditor() {
     return (
       <div className="h-full flex flex-col bg-zinc-900">
         <div className="px-3 py-2 border-b border-zinc-800 text-sm font-medium text-zinc-400">
-          Properties
+          属性
         </div>
         <div className="flex-1 flex items-center justify-center text-zinc-600 text-xs">
-          Select a clip to edit properties
+          选中片段以编辑属性
         </div>
       </div>
     );
@@ -137,10 +137,10 @@ export default function ClipPropertiesEditor() {
     return (
       <div className="h-full flex flex-col bg-zinc-900">
         <div className="px-3 py-2 border-b border-zinc-800 text-sm font-medium text-zinc-400">
-          Properties
+          属性
         </div>
         <div className="flex-1 flex items-center justify-center text-zinc-600 text-xs">
-          Select clips of the same type to batch edit
+          选中相同类型的片段才能批量编辑
         </div>
       </div>
     );
@@ -151,10 +151,10 @@ export default function ClipPropertiesEditor() {
     return (
       <div className="h-full flex flex-col bg-zinc-900">
         <div className="px-3 py-2 border-b border-zinc-800 text-sm font-medium text-zinc-400">
-          Properties — <span className="text-zinc-300">Audio ({selectedClipIds.size} clips)</span>
+          属性 — <span className="text-zinc-300">音频（{selectedClipIds.size} 个片段）</span>
         </div>
         <div className="flex-1 flex items-center justify-center text-zinc-600 text-xs">
-          Audio clips do not support batch style editing
+          音频片段不支持批量样式编辑
         </div>
       </div>
     );
@@ -166,23 +166,30 @@ export default function ClipPropertiesEditor() {
     return (
       <div className="h-full flex flex-col bg-zinc-900">
         <div className="px-3 py-2 border-b border-zinc-800 text-sm font-medium text-zinc-400">
-          Properties
+          属性
         </div>
         <div className="flex-1 flex items-center justify-center text-zinc-600 text-xs">
-          Clip not found
+          未找到片段
         </div>
       </div>
     );
   }
 
+  const CLIP_TYPE_LABELS: Record<string, string> = {
+    video: '视频',
+    audio: '音频',
+    subtitle: '字幕',
+    effect: '特效',
+  };
+  const typeLabel = CLIP_TYPE_LABELS[clipType ?? ''] ?? clipType;
   const headerLabel = isBatch
-    ? <>{clipType} <span className="text-zinc-500">({selectedClipIds.size} clips)</span></>
-    : clipType;
+    ? <>{typeLabel} <span className="text-zinc-500">（{selectedClipIds.size} 个片段）</span></>
+    : typeLabel;
 
   return (
     <div className="h-full flex flex-col bg-zinc-900">
       <div className="px-3 py-2 border-b border-zinc-800 text-sm font-medium text-zinc-400">
-        Properties — <span className="text-zinc-300 capitalize">{headerLabel}</span>
+        属性 — <span className="text-zinc-300">{headerLabel}</span>
       </div>
       <div className="flex-1 overflow-y-auto p-3">
         {clipType === 'subtitle' && (

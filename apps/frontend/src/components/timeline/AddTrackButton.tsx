@@ -8,10 +8,10 @@ interface AddTrackButtonProps {
 }
 
 const options: { type: TrackType; label: string }[] = [
-  { type: 'video', label: 'Video Track' },
-  { type: 'effect', label: 'Effect Track' },
-  { type: 'audio', label: 'Audio Track' },
-  { type: 'subtitle', label: 'Subtitle Track' },
+  { type: 'video', label: '视频轨道' },
+  { type: 'effect', label: '特效轨道' },
+  { type: 'audio', label: '音频轨道' },
+  { type: 'subtitle', label: '字幕轨道' },
 ];
 
 export default function AddTrackButton({ onAddTrack }: AddTrackButtonProps) {
@@ -52,7 +52,7 @@ export default function AddTrackButton({ onAddTrack }: AddTrackButtonProps) {
           <line x1="5" y1="1" x2="5" y2="9" />
           <line x1="1" y1="5" x2="9" y2="5" />
         </svg>
-        Add Track
+        添加轨道
       </button>
 
       {open && (

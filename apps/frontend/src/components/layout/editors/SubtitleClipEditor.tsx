@@ -83,7 +83,7 @@ export default function SubtitleClipEditor({ clip, onUpdate, batchMode }: Subtit
           <button
             onClick={() => resetField(fieldKey)}
             className="text-blue-400 hover:text-blue-300 transition-colors"
-            title="Reset to preset value"
+            title="重置为预设值"
           >
             <IconReset />
           </button>
@@ -97,14 +97,14 @@ export default function SubtitleClipEditor({ clip, onUpdate, batchMode }: Subtit
     <div className="space-y-3">
       {/* Preset Selector (popover) */}
       <fieldset className="space-y-1.5">
-        <legend className="text-xs text-zinc-500 font-medium">Style Preset</legend>
+        <legend className="text-xs text-zinc-500 font-medium">样式预设</legend>
         <PresetPopover currentPreset={presetName} onSelectPreset={handlePresetChange} />
       </fieldset>
 
       {/* Text Content (hidden in batch mode) */}
       {!batchMode && (
         <div>
-          <label className="block text-xs text-zinc-400 mb-1">Text</label>
+          <label className="block text-xs text-zinc-400 mb-1">文本</label>
           <textarea
             value={text}
             onChange={(e) => {
@@ -121,13 +121,13 @@ export default function SubtitleClipEditor({ clip, onUpdate, batchMode }: Subtit
       {/* ── Clip Overrides ────────────────────────────────── */}
       <div className="border-t border-zinc-700 pt-2">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs text-zinc-500 font-medium">Clip Overrides</span>
+          <span className="text-xs text-zinc-500 font-medium">片段级覆盖</span>
           {clip.subtitle_style && Object.keys(clip.subtitle_style).length > 0 && (
             <button
               onClick={() => onUpdate({ subtitle_style: undefined })}
               className="text-[10px] text-blue-400 hover:text-blue-300 transition-colors"
             >
-              Reset all
+              全部重置
             </button>
           )}
         </div>
@@ -135,7 +135,7 @@ export default function SubtitleClipEditor({ clip, onUpdate, batchMode }: Subtit
         <div className="space-y-2">
           {/* Position */}
           <fieldset className="space-y-1.5">
-            <legend className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider">Position</legend>
+            <legend className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider">位置</legend>
             <div className="grid grid-cols-2 gap-2">
               <FieldRow label="X" fieldKey="position_x">
                 <input type="number" value={resolved.position_x} min={0} max={1} step={0.01}
@@ -152,8 +152,8 @@ export default function SubtitleClipEditor({ clip, onUpdate, batchMode }: Subtit
 
           {/* Typography */}
           <fieldset className="space-y-1.5">
-            <legend className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider">Typography</legend>
-            <FieldRow label="Font Size" fieldKey="font_size">
+            <legend className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider">字体</legend>
+            <FieldRow label="字号" fieldKey="font_size">
               <input type="number" value={localFontSize} min={8} max={200}
                 onChange={(e) => {
                   const val = parseInt(e.target.value, 10);
@@ -163,16 +163,16 @@ export default function SubtitleClipEditor({ clip, onUpdate, batchMode }: Subtit
                 }}
                 className={inputCls('font_size')} />
             </FieldRow>
-            <FieldRow label="Color" fieldKey="color">
+            <FieldRow label="颜色" fieldKey="color">
               <ColorSwatch value={resolved.color} onChange={(c) => handleStyleChange('color', c)} />
             </FieldRow>
-            <FieldRow label="Align" fieldKey="text_align">
+            <FieldRow label="对齐" fieldKey="text_align">
               <select value={resolved.text_align}
                 onChange={(e) => handleStyleChange('text_align', e.target.value)}
                 className={inputCls('text_align')}>
-                <option value="left">Left</option>
-                <option value="center">Center</option>
-                <option value="right">Right</option>
+                <option value="left">左对齐</option>
+                <option value="center">居中</option>
+                <option value="right">右对齐</option>
               </select>
             </FieldRow>
             <div className="flex gap-3">
@@ -181,7 +181,7 @@ export default function SubtitleClipEditor({ clip, onUpdate, batchMode }: Subtit
                   <input type="checkbox" checked={resolved.bold}
                     onChange={(e) => handleStyleChange('bold', e.target.checked)}
                     className="rounded border-zinc-600" />
-                  Bold
+                  加粗
                 </label>
                 {hasOverride(clip.subtitle_style, 'bold') && (
                   <button onClick={() => resetField('bold')} className="text-blue-400 hover:text-blue-300"><IconReset /></button>
@@ -192,14 +192,14 @@ export default function SubtitleClipEditor({ clip, onUpdate, batchMode }: Subtit
                   <input type="checkbox" checked={resolved.italic}
                     onChange={(e) => handleStyleChange('italic', e.target.checked)}
                     className="rounded border-zinc-600" />
-                  Italic
+                  斜体
                 </label>
                 {hasOverride(clip.subtitle_style, 'italic') && (
                   <button onClick={() => resetField('italic')} className="text-blue-400 hover:text-blue-300"><IconReset /></button>
                 )}
               </div>
             </div>
-            <FieldRow label="Letter Spacing (px)" fieldKey="letter_spacing">
+            <FieldRow label="字间距（px）" fieldKey="letter_spacing">
               <input type="number" value={resolved.letter_spacing} step={0.5}
                 onChange={(e) => handleStyleChange('letter_spacing', parseFloat(e.target.value) || 0)}
                 className={inputCls('letter_spacing')} />
@@ -208,26 +208,26 @@ export default function SubtitleClipEditor({ clip, onUpdate, batchMode }: Subtit
 
           {/* Appearance */}
           <fieldset className="space-y-1.5">
-            <legend className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider">Appearance</legend>
-            <FieldRow label="Background" fieldKey="background">
+            <legend className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider">外观</legend>
+            <FieldRow label="背景" fieldKey="background">
               <input type="text" value={resolved.background}
                 onChange={(e) => handleStyleChange('background', e.target.value)}
-                placeholder="rgba(0,0,0,0.6) or transparent"
+                placeholder="rgba(0,0,0,0.6) 或 transparent"
                 className={inputCls('background')} />
             </FieldRow>
-            <FieldRow label="Padding" fieldKey="padding">
+            <FieldRow label="内边距" fieldKey="padding">
               <input type="text" value={resolved.padding}
                 onChange={(e) => handleStyleChange('padding', e.target.value)}
                 placeholder="4px 16px"
                 className={inputCls('padding')} />
             </FieldRow>
             <div className="grid grid-cols-2 gap-2">
-              <FieldRow label="Border Radius (px)" fieldKey="border_radius">
+              <FieldRow label="圆角（px）" fieldKey="border_radius">
                 <input type="number" value={resolved.border_radius} min={0}
                   onChange={(e) => handleStyleChange('border_radius', parseFloat(e.target.value) || 0)}
                   className={inputCls('border_radius')} />
               </FieldRow>
-              <FieldRow label="Opacity" fieldKey="opacity">
+              <FieldRow label="不透明度" fieldKey="opacity">
                 <input type="number" value={resolved.opacity} min={0} max={1} step={0.05}
                   onChange={(e) => handleStyleChange('opacity', parseFloat(e.target.value) || 1)}
                   className={inputCls('opacity')} />
@@ -237,18 +237,18 @@ export default function SubtitleClipEditor({ clip, onUpdate, batchMode }: Subtit
 
           {/* Outline & Shadow */}
           <fieldset className="space-y-1.5">
-            <legend className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider">Outline & Shadow</legend>
+            <legend className="text-[10px] text-zinc-500 font-medium uppercase tracking-wider">描边与阴影</legend>
             <div className="grid grid-cols-2 gap-2">
-              <FieldRow label="Outline Color" fieldKey="outline_color">
+              <FieldRow label="描边颜色" fieldKey="outline_color">
                 <ColorSwatch value={resolved.outline_color} onChange={(c) => handleStyleChange('outline_color', c)} allowTransparent />
               </FieldRow>
-              <FieldRow label="Outline Width" fieldKey="outline_width">
+              <FieldRow label="描边宽度" fieldKey="outline_width">
                 <input type="number" value={resolved.outline_width} min={0} step={0.5}
                   onChange={(e) => handleStyleChange('outline_width', parseFloat(e.target.value) || 0)}
                   className={inputCls('outline_width')} />
               </FieldRow>
             </div>
-            <FieldRow label="Shadow (CSS text-shadow)" fieldKey="shadow">
+            <FieldRow label="阴影（CSS text-shadow）" fieldKey="shadow">
               <input type="text"
                 value={resolved.shadow === 'none' ? '' : resolved.shadow}
                 onChange={(e) => handleStyleChange('shadow', e.target.value || 'none')}

@@ -3,6 +3,7 @@ import { useAppStore } from '../../stores/appStore';
 import { sendChatMessage } from '../../lib/api';
 import AgentProgressDisplay from '../chat/AgentProgressDisplay';
 import MessageProgressDisplay from '../chat/MessageProgressDisplay';
+import ExternalActivityFeed from '../chat/ExternalActivityFeed';
 
 export default function ChatPanel() {
   const [input, setInput] = useState('');
@@ -55,9 +56,9 @@ export default function ChatPanel() {
     } catch (e: any) {
       const { toolCalls, reasonings } = archiveAgentProgress();
       if (e.name === 'AbortError') {
-        addMessage({ role: 'assistant', content: 'Interrupted by user.', toolCalls, reasonings });
+        addMessage({ role: 'assistant', content: '已被用户中断。', toolCalls, reasonings });
       } else {
-        addMessage({ role: 'system', content: `Error: ${e.message}` });
+        addMessage({ role: 'system', content: `出错了：${e.message}` });
       }
     } finally {
       abortControllerRef.current = null;
@@ -75,15 +76,16 @@ export default function ChatPanel() {
   return (
     <div className="h-full flex flex-col bg-zinc-900 border-l border-zinc-800">
       <div className="px-3 py-2 border-b border-zinc-800 text-sm font-medium text-zinc-400">
-        Chat
+        助手
       </div>
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-3 space-y-3">
+        <ExternalActivityFeed />
         {messages.length === 0 && (
           <div className="space-y-3">
             <div className="text-zinc-500 text-sm">
-              告诉 VibeCut 你想怎么剪辑视频。
+              告诉 VibeCut 你想怎么剪辑视频。也可以让外部 Agent（如 Claude Code / Cursor）通过工具网关直接剪辑，操作会实时显示在这里。
             </div>
             <div className="flex flex-wrap gap-2">
               {EXAMPLE_PROMPTS.map((prompt, i) => (
@@ -127,7 +129,7 @@ export default function ChatPanel() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Describe your edit..."
+            placeholder="描述你想要的剪辑效果..."
             disabled={sending}
             rows={1}
             className="flex-1 bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-blue-500 disabled:opacity-50 resize-none max-h-40 overflow-y-auto"
@@ -137,7 +139,7 @@ export default function ChatPanel() {
               onClick={handleAbort}
               className="px-4 py-2 bg-red-600 hover:bg-red-500 rounded-lg text-sm font-medium transition-colors shrink-0"
             >
-              Stop
+              停止
             </button>
           ) : (
             <button
@@ -145,7 +147,7 @@ export default function ChatPanel() {
               disabled={!input.trim()}
               className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
             >
-              Send
+              发送
             </button>
           )}
         </div>

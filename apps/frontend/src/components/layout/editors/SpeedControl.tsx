@@ -24,10 +24,10 @@ export default function SpeedControl({ clip, onSpeedChange }: SpeedControlProps)
 
   return (
     <fieldset>
-      <legend className="text-xs font-medium text-zinc-300 mb-2">Speed</legend>
+      <legend className="text-xs font-medium text-zinc-300 mb-2">变速</legend>
       <div className="space-y-2">
         <div>
-          <label className="block text-xs text-zinc-400 mb-1">Playback Speed</label>
+          <label className="block text-xs text-zinc-400 mb-1">播放速度</label>
           <input
             type="number"
             value={local}

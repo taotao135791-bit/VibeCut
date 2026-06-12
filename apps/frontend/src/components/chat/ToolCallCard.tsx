@@ -46,7 +46,7 @@ export default function ToolCallCard({ toolCall }: { toolCall: ToolCallProgress 
           <span className="text-zinc-600 ml-1">{expanded ? '▾' : '▸'}</span>
         )}
         <span className="ml-auto text-zinc-500">
-          {toolCall.status === 'running' ? 'running...' : toolCall.status}
+          {toolCall.status === 'running' ? '运行中...' : toolCall.status === 'completed' ? '完成' : '失败'}
         </span>
       </div>
 
